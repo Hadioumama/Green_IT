@@ -17,3 +17,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+
+
+//PARTIE ETUDIANT 2 
+use App\Http\Controllers\EnergyController;
+
+Route::get('/total-consumption', [EnergyController::class, 'totalConsumption']);
+Route::get('/co2', [EnergyController::class, 'carbonEmission']);
+Route::get('/by-device', [EnergyController::class, 'byDevice']);
