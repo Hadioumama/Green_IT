@@ -1,0 +1,459 @@
+/* ============================================
+   VARIABLES & RESET
+   ============================================ */
+:root {
+    --primary: rgb(7, 152, 77);
+    --primary-dark: #rgb(7, 152, 77);
+    --primary-light: rgb(7, 152, 77);
+    --success: rgb(7, 152, 77);
+    --error: #ef4444;
+    --text-dark: #1e293b;
+    --text-medium: #64748b;
+    --text-light: #102a4e;
+    --bg-light: #f8fafc;
+    --white: #ffffff;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 15px; /* Réduit légèrement */
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text-dark);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   SPLIT LAYOUT — SANS SCROLL
+   ============================================ */
+.split-container {
+    display: flex;
+    height: 100vh;        /* ← Hauteur fixe = viewport, pas min-height */
+    width: 100%;
+    overflow: hidden;     /* ← Empêche tout scroll */
+}
+
+/* ========== COLONNE GAUCHE ========== */
+.split-left {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.split-left img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 1;                    /* ← Image normale */
+    transition: transform 6s ease; /* ← Animation fluide */
+}
+
+/* Zoom au survol de la colonne gauche */
+.split-left:hover img {
+    transform: scale(1.08);        /* ← Zoom 8% */
+}
+.split-left::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.6) 100%  /* Légère ombre en bas SEULEMENT pour le texte */
+    );
+}
+.image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 40px 45px;   /* ← Réduit de 60px à 40px */
+    color: var(--white);
+    z-index: 2;
+}
+
+
+.brand {
+    position: absolute;   /* ← Sort du flux normal */
+    top: 30px;            /* ← Distance du haut */
+    left: 45px;           /* ← Distance de la gauche */
+    z-index: 3;           /* ← Au-dessus de l'image */
+    /* Styles visuels */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.brand i {
+    font-size: 1.5rem;    /* ← Réduit de 2rem */
+    color: var(--success);
+}
+
+.image-overlay h1 {
+    font-size: 2.25rem;   /* ← Réduit de 3rem */
+    font-weight: 700;
+    margin-bottom: 10px;  /* ← Réduit de 16px */
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.image-overlay > p {
+    font-size: 0.9375rem; /* ← Réduit de 1.125rem */
+    line-height: 1.6;
+    opacity: 0.85;
+    margin-bottom: 24px;  /* ← Réduit de 40px */
+    max-width: 360px;     /* ← Réduit de 400px */
+}
+
+/* Features — VERSION COMPACTE */
+.features {
+    display: flex;
+    gap: 18px;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem; /* ← Réduit de 0.875rem */
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.feature i {
+    font-size: 1rem;      /* ← Réduit de 1.25rem */
+    color: var(--success);
+}
+
+/* ========== COLONNE DROITE ========== */
+.split-right {
+    flex: 1;
+    display: flex;
+    align-items: center;      /* ← Centre verticalement */
+    justify-content: center;  /* ← Centre horizontalement */
+    background: var(--bg-light);
+    padding: 20px;            /* ← Réduit de 40px */
+}
+
+.login-box {
+    width: 100%;
+    max-width: 400px;         /* ← Réduit de 440px */
+    background: var(--white);
+    padding: 32px;            /* ← Réduit de 48px */
+    border-radius: var(--radius-xl);
+    box-shadow: 0 10px 40px rgb(186, 206, 196);
+    border: 1.5px solid rgb(16, 78, 45);
+}
+
+/* En-tête compact */
+.login-header {
+    text-align: center;
+    margin-bottom: 20px;      /* ← Réduit de 32px */
+}
+
+.icon-circle {
+    width: 48px;              /* ← Réduit de 64px */
+    height: 48px;             /* ← Réduit de 64px */
+   background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;      /* ← Réduit de 20px */
+    box-shadow: 0 4px 12px rgb(184, 214, 198);
+}
+
+.icon-circle i {
+    font-size: 1.375rem;      /* ← Réduit de 1.75rem */
+    color: var(--white);
+}
+
+.login-header h2 {
+    font-size: 1.5rem;        /* ← Réduit de 1.75rem */
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 4px;       /* ← Réduit de 8px */
+}
+
+.subtitle {
+    color: var(--text-medium);
+    font-size: 0.875rem;      /* ← Réduit de 0.9375rem */
+}
+
+/* ============================================
+   FORMULAIRE COMPACT
+   ============================================ */
+.form-group {
+    margin-bottom: 14px;      /* ← Réduit de 20px */
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.8125rem;    /* ← Réduit de 0.875rem */
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 5px;       /* ← Réduit de 8px */
+}
+
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.forgot-link {
+    font-size: 0.75rem;       /* ← Réduit de 0.8125rem */
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot-link:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* Input compact */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper > i:first-child {
+    position: absolute;
+    left: 14px;               /* ← Réduit de 16px */
+    font-size: 1.125rem;      /* ← Réduit de 1.25rem */
+    color: rgb(7, 152, 77);
+    pointer-events: none;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 11px 14px 11px 42px;  /* ← Réduit de 14px/16px/48px */
+    border: 2px solid rgb(7, 152, 77);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;      /* ← Réduit de 0.9375rem */
+    font-family: inherit;
+    color: #1e293b; 
+    background: #ffffff;
+    transition: all 0.2s;
+}
+
+.input-wrapper input::placeholder {
+    color: #1e293b ;
+    font-size: 0.875rem;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+   
+    box-shadow: 0 0 0 3px white;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+    font-size: 1.125rem;      /* ← Réduit de 1.25rem */
+    padding: 4px;
+}
+
+.toggle-password:hover {
+    color: var(--text-medium);
+}
+
+/* Erreurs compactes */
+.error {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;          /* ← Réduit de 8px */
+    font-size: 0.75rem;      /* ← Réduit de 0.8125rem */
+    color: var(--error);
+}
+
+.error i {
+    font-size: 0.875rem;      /* ← Réduit de 1rem */
+}
+
+/* ============================================
+   CHECKBOX COMPACT
+   ============================================ */
+.remember-me {
+    margin-bottom: 16px;      /* ← Réduit de 24px */
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;                /* ← Réduit de 12px */
+    cursor: pointer;
+}
+
+.checkbox-wrapper input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.checkmark {
+    width: 18px;              /* ← Réduit de 20px */
+    height: 18px;             /* ← Réduit de 20px */
+    border: 2px solid rgb(7, 152, 77);
+    border-radius: 5px;       /* ← Réduit de 6px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.checkmark::after {
+    content: '';
+    width: 5px;               /* ← Réduit de 6px */
+    height: 9px;              /* ← Réduit de 10px */
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform 0.2s;
+    margin-bottom: 1px;
+}
+
+.checkbox-wrapper input:checked + .checkmark {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.checkbox-wrapper input:checked + .checkmark::after {
+    transform: rotate(45deg) scale(1);
+}
+
+.label-text {
+    font-size: 0.8125rem;     /* ← Réduit de 0.875rem */
+    color: var(--text-medium);
+}
+
+/* ============================================
+   BOUTON COMPACT
+   ============================================ */
+.btn-primary {
+    width: 100%;
+    padding: 12px 20px;       /* ← Réduit de 14px/24px */
+   background: linear-gradient(135deg, #0a7954 0%, #059669 100%); 
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;     /* ← Réduit de 1rem */
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;                 /* ← Réduit de 10px */
+    box-shadow: 0 4px 12px rgb(196, 222, 209);
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgb(7, 152, 77);
+}
+
+.btn-primary i {
+    font-size: 1rem;          /* ← Réduit de 1.125rem */
+}
+
+/* ============================================
+   ALERTES COMPACTES
+   ============================================ */
+.alert {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;       /* ← Réduit de 14px/16px */
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;      /* ← Réduit de 24px */
+    font-size: 0.8125rem;     /* ← Réduit de 0.875rem */
+}
+
+.alert-success {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.alert i {
+    font-size: 1.125rem;      /* ← Réduit de 1.25rem */
+}
+
+/* ============================================
+   LIEN INSCRIPTION — SANS DIVIDER
+   ============================================ */
+.register-link {
+    text-align: center;
+    margin-top: 18px;         /* ← Réduit */
+    padding-top: 18px;        /* ← Ajouté */
+    border-top: 1px solid rgb(7, 152, 77);  /* ← Ligne subtile au lieu de "ou" */
+    font-size: 0.875rem;
+    color: var(--text-medium);
+}
+
+.register-link a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 4px;
+}
+
+.register-link a:hover {
+    color: black;
+    text-decoration: underline;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+    .split-left {
+        display: none;
+    }
+    
+    .split-right {
+        padding: 16px;
+    }
+    
+    .login-box {
+        padding: 28px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    html {
+        font-size: 14px;
+    }
+    
+    .login-box {
+        padding: 24px 20px;
+    }
+}

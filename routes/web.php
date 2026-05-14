@@ -33,7 +33,7 @@ Route::get('/home', function () {
 Route::view('/contact','contact')->Middleware('testM');
 Route::get('/data','App\Http\Controllers\C1@getdata');*/
 Route::get('/register', [AuthController::class, 'showRegister']);
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
