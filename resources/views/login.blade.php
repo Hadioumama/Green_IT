@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription</title>
+    <title>Connexion</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
 
 <div class="auth-box">
-    <h2>Inscription</h2>
+    <h2>Connexion</h2>
 
-    <form method="POST" action="/register">
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <form method="POST" action="/login">
         @csrf
-
-        <div class="form-group">
-            <input type="text" name="name" placeholder="Nom" value="{{ old('name') }}" required>
-        </div>
 
         <div class="form-group">
             <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
@@ -29,11 +29,11 @@
             <input type="password" name="password" placeholder="Mot de passe" required>
         </div>
 
-        <button type="submit" class="btn-primary">S'inscrire</button>
+        <button type="submit" class="btn-primary">Se connecter</button>
     </form>
 
     <p class="auth-link">
-        Déjà un compte ? <a href="/login">Se connecter</a>
+        Pas encore de compte ? <a href="/register">S'inscrire</a>
     </p>
 </div>
 
