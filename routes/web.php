@@ -34,3 +34,13 @@ Route::view('/contact','contact')->Middleware('testM');
 Route::get('/data','App\Http\Controllers\C1@getdata');*/
 Route::get('/register', [AuthController::class, 'showRegister']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/dashboard', function () {
+    // Auth::user() récupère l'utilisateur connecté
+return view('dashboard', ['user' => Auth::user()]);
+})->middleware('auth'); // ← Bloque l'accès si non connecté
+Route::get('/dashboard', function () {
+    return view('dashboard', ['user' => Auth::user()]);
+})->middleware('auth');
