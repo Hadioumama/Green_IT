@@ -3,13 +3,13 @@
    ============================================ */
 :root {
     --primary: rgb(7, 152, 77);
-    --primary-dark: #4f46e5;
-    --primary-light: #818cf8;
-    --success: #10b981;
+    --primary-dark: #rgb(7, 152, 77);
+    --primary-light: rgb(7, 152, 77);
+    --success: rgb(7, 152, 77);
     --error: #ef4444;
     --text-dark: #1e293b;
     --text-medium: #64748b;
-    --text-light: #94a3b8;
+    --text-light: #102a4e;
     --bg-light: #f8fafc;
     --white: #ffffff;
     --radius-sm: 6px;
@@ -252,13 +252,13 @@ body {
     border-radius: var(--radius-md);
     font-size: 0.875rem;      /* ← Réduit de 0.9375rem */
     font-family: inherit;
-    color:  rgb(7, 152, 77);
-    background: var(--white);
+    color: #1e293b; 
+    background: #ffffff;
     transition: all 0.2s;
 }
 
 .input-wrapper input::placeholder {
-    color:  rgb(7, 152, 77);
+    color: #1e293b ;
     font-size: 0.875rem;
 }
 
@@ -427,7 +427,7 @@ body {
 }
 
 .register-link a:hover {
-    color: var(--primary-dark);
+    color: black;
     text-decoration: underline;
 }
 

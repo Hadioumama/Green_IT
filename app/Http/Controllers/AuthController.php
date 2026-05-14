@@ -32,7 +32,7 @@ class AuthController extends Controller
                 'role' => 'user'
             ]);
 
-            return redirect('/login')->with('success', 'Compte créé');
+            return redirect('/login')->with('success', 'Compte créé avec succées');
 
         } catch (\Throwable $e) {
             return dd($e->getMessage());

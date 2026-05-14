@@ -135,7 +135,7 @@
 
          <div class="register-link">
     <span>Pas encore de compte ?</span>
-    <a href="{{ route('register') }}">Créer un compte</a>
+    <a href="{{ route('register') }}">Créer un compte </a>
 </div>
 
             </div>
