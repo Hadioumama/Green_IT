@@ -1,0 +1,274 @@
+/* ============================================
+   REGISTER - Carte centrée sur fond image
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 15px;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1e293b;
+    line-height: 0.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   FOND IMAGE (plein écran)
+   ============================================ */
+.register-bg {
+    min-height: 40vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 10px;
+    
+    /* Image de fond */
+    background-image: url('/images/login-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    /* Overlay sombre pour lisibilité */
+    position: relative;
+}
+
+/* Overlay assombrissant */
+.register-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.021);  /* Noir 40% = fond plus sombre */
+    backdrop-filter: blur(1px);         /* Légèrement flou */
+}
+
+/* ============================================
+   CARTE NUDE (semi-transparente)
+   ============================================ */
+.register-card {
+    position: relative;       /* Au-dessus de l'overlay */
+    z-index: 2;
+    width: 100%;
+    max-width: 440px;
+    
+    /* COULEUR NUDE / BEIGE semi-transparente */
+    background: rgba(149, 186, 157, 0.516);  /* Nude à 88% opaque */
+    
+    /* Alternative plus chaude */
+    /* background: rgba(232, 220, 200, 0.90); */
+    
+    /* Alternative plus froide */
+    /* background: rgba(240, 235, 225, 0.85); */
+    
+    padding: 20px 15px;
+    border-radius: 20px;
+    
+    /* Bordure subtile */
+    border: 2px solid rgba(237, 231, 231, 0.324);
+    
+    /* Ombre douce */
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+/* ============================================
+   EN-TÊTE
+   ============================================ */
+.register-header {
+    text-align: center;
+    margin-bottom: 30px;
+     display: flex;
+     flex-direction:column ;
+   gap: 15px;
+    
+}
+
+.icon-circle {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #17ae6f 0%, #1ca450 100%);  /* Nude foncé */
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    box-shadow: 0 4px 12px rgba(160, 130, 109, 0.3);
+}
+
+.icon-circle i {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.register-header h2 {
+    font-size: 1.625rem;
+    font-weight: 700;
+    color:white;  /* Marron chaud */
+    margin-bottom: 6px;
+}
+
+.subtitle {
+    color: white;  /* Nude foncé */
+    font-size: 0.875rem;
+}
+
+/* ============================================
+   FORMULAIRE
+   ============================================ */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color:white;  /* Marron doux */
+    margin-bottom: 6px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper > i:first-child {
+    position: absolute;
+    left: 14px;
+    font-size: 1.125rem;
+    color:#17ae6f;  /* Nude moyen */
+    pointer-events: none;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 12px 14px 12px 44px;
+    border: 3px solid #0b9a5e;  /* Bordure nude */
+    border-radius: 12px;
+    font-size: 0.9375rem;
+    font-family: inherit;
+    color: #4a3f35;  /* Texte marron foncé */
+    background: rgba(255, 255, 255, 0.6);  /* Blanc légèrement transparent */
+    transition: all 0.2s;
+}
+
+.input-wrapper input::placeholder {
+    color:#0b9a5e;  /* Placeholder nude clair */
+}
+
+/* PAS de changement au focus (comme demandé) */
+.input-wrapper input:focus {
+    outline: none;
+    border-color:#0b9a5e;
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+/* Toggle password */
+.toggle-password {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color:#0b9a5e;
+    font-size: 1.125rem;
+    padding: 4px;
+}
+
+.toggle-password:hover {
+    color: #6b5b4f;
+}
+
+/* Erreurs */
+.error {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+    font-size: 0.75rem;
+    color: #c45c4a;  /* Rouge terre */
+}
+
+.error i {
+    font-size: 0.875rem;
+}
+
+/* ============================================
+   BOUTON
+   ============================================ */
+.btn-primary {
+    width: 100%;
+    padding: 13px 20px;
+    background: linear-gradient(135deg,#1ca450 0%, #1ca450 100%);  /* Nude dégradé */
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(160, 130, 109, 0.3);
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px #17ae6f;
+}
+
+.btn-primary i {
+    font-size: 1rem;
+}
+
+/* ============================================
+   LIEN CONNEXION
+   ============================================ */
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(180, 160, 140, 0.4);
+    font-size: 0.900rem;
+    color: white;
+}
+
+.login-link a {
+    color: white;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 4px;
+}
+
+.login-link a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 480px) {
+    .register-bg {
+        padding: 20px 16px;
+    }
+    
+    .register-card {
+        padding: 32px 24px;
+        border-radius: 16px;
+    }
+}
