@@ -113,7 +113,7 @@
                             
                             <!-- Type -->
                             <td>
-                                <span class="badge-type badge-{{ strtolower(str_replace(' ', '-', $device->type)) }}">
+                                <span class="badge-type badge-{{ strtolower($device->type) }}">
                                     {{ $device->type }}
                                 </span>
                             </td>
@@ -161,13 +161,12 @@
                             <!-- Statut -->
                             <td>
                                 <span class="badge-status status-{{ $device->statut }}">
-                                    {{ match($device->statut) {
-                                        'actif' => 'Actif',
-                                        'stock' => 'Stock',
-                                        'en_reparation' => 'Réparation',
-                                        'hors_service' => 'Hors service',
-                                        'recycle' => 'À recycler',
-                                    } }}
+                                    {{ 
+                                        $device->statut == 'actif' ? 'Actif' :
+                                        ($device->statut == 'stock' ? 'Stock' :
+                                        ($device->statut == 'en_reparation' ? 'Réparation' :
+                                        ($device->statut == 'hors_service' ? 'Hors service' : 'À recycler')))
+                                    }}
                                 </span>
                             </td>
                             

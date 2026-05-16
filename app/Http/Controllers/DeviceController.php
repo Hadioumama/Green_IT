@@ -82,7 +82,7 @@ class DeviceController extends Controller
         $device->calculerEmpreinteFabrication();
 
         return redirect()
-            ->route('index')
+            ->route('devices.index')
             ->with('success', sprintf(
                 'Équipement "%s" ajouté. Consommation: %.2f kWh/an | Émissions: %.2f kg CO₂/an',
                 $device->nom,
@@ -151,7 +151,7 @@ class DeviceController extends Controller
         }
 
         return redirect()
-            ->route('index')
+            ->route('devices.index')
             ->with('success', 'Équipement "' . $device->nom . '" mis à jour.');
     }
 
@@ -164,7 +164,7 @@ class DeviceController extends Controller
         $device->delete();
         
         return redirect()
-            ->route('index')
+            ->route('devices.index')
             ->with('success', 'Équipement "' . $nom . '" supprimé.');
     }
 }
