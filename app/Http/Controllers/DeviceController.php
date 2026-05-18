@@ -80,7 +80,7 @@ class DeviceController extends Controller
         
         // 3. Empreinte fabrication via API (simulation)
         $device->calculerEmpreinteFabrication();
-
+      $device->refresh();
         return redirect()
             ->route('devices.index')
             ->with('success', sprintf(
