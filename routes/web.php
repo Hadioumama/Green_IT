@@ -44,3 +44,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/energy/create', [EnergyController::class, 'createWeb'])->name('energy.create');
     Route::post('/energy', [EnergyController::class, 'storeWeb'])->name('energy.store');
 });
+Route::get('/devices/a-remplacer', [DeviceController::class, 'aRemplacer'])->name('devices.remplacer');

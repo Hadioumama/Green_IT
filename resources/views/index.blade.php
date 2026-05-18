@@ -75,11 +75,6 @@
     justify-content: center;
     border: 2px solid white;
 }
-
-/* ═══════════════════════════════════════════════ */
-/* INFOBULLE (tooltip) */
-/* ═══════════════════════════════════════════════ */
-
 /* ═══════════════════════════════════════════════ */
 /* INFOBULLE AVEC LISTE COMPLÈTE */
 /* ═══════════════════════════════════════════════ */
@@ -363,7 +358,23 @@
     flex-direction: column;
     gap: 8px;
 }
+.tooltip-more {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 6px 12px;
+    background-color: #e76d26;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
 
+.tooltip-more:hover {
+    background-color: #d34b15;
+    transform: translateX(3px);
+}
 /* Item du modal */
 .modal-item {
     display: flex;
@@ -394,7 +405,6 @@
         <div class="alert-badge" id="alertBadge">
             <i class="ph ph-warning"></i>
             <span class="alert-count">{{ $devicesAremplacer->count() }}</span>
-            
             <!-- Infobulle (aperçu au survol) -->
             <div class="alert-tooltip" id="alertTooltip">
                 <!-- Vue APERÇU (par défaut) -->
@@ -404,7 +414,7 @@
                         <span>Équipements à remplacer</span>
                     </div>
                     <div class="tooltip-list">
-                        @foreach($devicesAremplacer->take(3) as $device)
+                        @foreach($devicesAremplacer->take(5) as $device)
                             @php
                                 $raisons = [];
                                 if ($device->statut === 'recycle') $raisons[] = 'À recycler';
@@ -418,11 +428,11 @@
                                 <span class="tooltip-reason">{{ implode(' + ', $raisons) }}</span>
                             </div>
                         @endforeach
-                        @if($devicesAremplacer->count() > 3)
-                            <div class="tooltip-more">
-                                +{{ $devicesAremplacer->count() - 3 }} autres...
-                            </div>
-                        @endif
+                        @if($devicesAremplacer->count()>3)
+                            <a href="{{ route('devices.remplacer') }}" class="tooltip-more">
+                             Voir les {{ $devicesAremplacer->count() }} équipements →
+                           </a>
+@endif
                     </div>
                     
                 </div>
@@ -460,7 +470,7 @@
             </div>
         </div>
         @endif
-        
+       
         <a href="{{ route('devices.create') }}" class="btn btn-primary">
             <i class="ph ph-plus"></i> Ajouter un équipement
         </a>

@@ -127,6 +127,33 @@ class DeviceController extends Controller
         $users = User::all();
         return view('devices.edit', compact('device', 'users'));
     }
+    /**
+ * Affiche la liste complète des équipements à remplacer
+ */
+public function aRemplacer()
+{
+    $devices = Device::with('user')
+        ->where(function($query) {
+            $query->where('statut', 'recycle')
+                  ->orWhere(function($q) {
+                      $q->whereNotNull('date_achat')
+                        ->whereNotNull('duree_vie_annees')
+                        ->whereRaw('TIMESTAMPDIFF(YEAR, date_achat, CURDATE()) >= duree_vie_annees');
+                  });
+        })
+        ->get();
+
+    $stats = [
+        'a_recycler' => $devices->where('statut', 'recycle')->count(),
+        'age_depasse' => $devices->filter(function($d) {
+            $age = $d->date_achat ? now()->diffInYears($d->date_achat) : null;
+            return $age !== null && $d->duree_vie_annees && $age >= $d->duree_vie_annees;
+        })->count(),
+        'cout_total' => $devices->sum('cout_energie_annuel'),
+    ];
+
+    return view('devices.remplacer', compact('devices', 'stats'));
+}
 
     /**
      * Met à jour un équipement (recalcule si puissance change)
