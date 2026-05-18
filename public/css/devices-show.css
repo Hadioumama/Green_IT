@@ -1,0 +1,594 @@
+/* ============================================
+   GREEN IT MANAGER — Device Show (Détails)
+   ============================================ */
+
+:root {
+    --primary: #22c55e;
+    --primary-dark: #16a34a;
+    --primary-light: #dcfce7;
+    --blue: #3b82f6;
+    --orange: #f97316;
+    --red: #ef4444;
+    --purple: #a855f7;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --radius: 12px;
+    --radius-lg: 16px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--gray-100);
+    color: var(--gray-800);
+    line-height: 1.5;
+}
+
+.page-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-600);
+    background: white;
+    border: 1px solid var(--gray-200);
+    text-decoration: none;
+    width: fit-content;
+    transition: all 0.2s;
+}
+
+.btn-back:hover {
+    background: var(--gray-50);
+    border-color: var(--gray-300);
+}
+
+.header-title h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 10px;
+}
+
+.header-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Badges */
+.badge-type, .badge-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.badge-type {
+    background: var(--blue-light);
+    color: var(--blue);
+}
+
+.badge-status.status-actif { background: #dcfce7; color: #166534; }
+.badge-status.status-stock { background: var(--gray-100); color: var(--gray-600); }
+.badge-status.status-en_reparation { background: #fef3c7; color: #92400e; }
+.badge-status.status-hors_service { background: #fee2e2; color: #991b1b; }
+.badge-status.status-recycle { background: #ffedd5; color: #9a3412; }
+
+/* Actions */
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.btn-edit {
+    background: var(--blue);
+    color: white;
+}
+
+.btn-edit:hover {
+    background: #2563eb;
+}
+
+.btn-delete {
+    background: #fee2e2;
+    color: var(--red);
+}
+
+.btn-delete:hover {
+    background: #fecaca;
+}
+
+.inline-form { display: inline; }
+
+/* ============================================
+   GRILLE PRINCIPALE
+   ============================================ */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.detail-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ============================================
+   CARTES
+   ============================================ */
+
+.detail-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-100);
+    overflow: hidden;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--gray-100);
+    background: var(--gray-50);
+}
+
+.card-header i {
+    font-size: 20px;
+    color: var(--primary);
+}
+
+.card-header h2 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-700);
+    flex: 1;
+}
+
+.card-header .badge {
+    font-size: 11px;
+    padding: 4px 10px;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border-radius: 12px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Lignes d'info */
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-size: 13px;
+    color: var(--gray-500);
+    font-weight: 500;
+}
+
+.info-value {
+    font-size: 14px;
+    color: var(--gray-800);
+    font-weight: 600;
+    text-align: right;
+}
+
+.info-value.code {
+    font-family: 'Courier New', monospace;
+    background: var(--gray-100);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.info-value.price {
+    color: var(--primary-dark);
+    font-size: 15px;
+}
+
+.text-muted {
+    color: var(--gray-400);
+    font-style: italic;
+}
+
+/* User chip */
+.user-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary-light);
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+
+.user-chip i {
+    color: var(--primary);
+    font-size: 16px;
+}
+
+.user-chip span {
+    font-weight: 600;
+    color: var(--gray-800);
+    font-size: 13px;
+}
+
+.user-chip small {
+    color: var(--gray-500);
+    font-size: 11px;
+}
+
+/* Description */
+.description-text {
+    color: var(--gray-600);
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+/* ============================================
+   SCORE GREEN IT
+   ============================================ */
+
+.card-score {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 24px;
+}
+
+.score-ring {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 6px solid;
+    flex-shrink: 0;
+}
+
+.score-ring.score-good {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.score-ring.score-medium {
+    border-color: #f59e0b;
+    background: #fef3c7;
+}
+
+.score-ring.score-bad {
+    border-color: var(--red);
+    background: #fee2e2;
+}
+
+.score-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1;
+}
+
+.score-label {
+    font-size: 11px;
+    color: var(--gray-500);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.score-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.score-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--gray-600);
+}
+
+.score-item i {
+    color: var(--primary);
+    font-size: 16px;
+}
+
+/* ============================================
+   ENERGIE
+   ============================================ */
+
+.energy-highlight {
+    text-align: center;
+    padding: 20px;
+    background: linear-gradient(135deg, var(--primary-light), white);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+}
+
+.energy-big {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.energy-number {
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1;
+}
+
+.energy-unit {
+    font-size: 16px;
+    color: var(--gray-500);
+    font-weight: 500;
+}
+
+.energy-breakdown {
+    font-size: 13px;
+    color: var(--gray-600);
+}
+
+.energy-breakdown i {
+    color: var(--orange);
+}
+
+/* ============================================
+   CARBONE
+   ============================================ */
+
+.carbon-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.carbon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    padding: 16px;
+    background: var(--gray-50);
+    border-radius: var(--radius);
+}
+
+.carbon-item i {
+    font-size: 24px;
+    color: var(--primary);
+}
+
+.carbon-label {
+    font-size: 11px;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.carbon-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-800);
+}
+
+/* ============================================
+   SECTION HISTORIQUE
+   ============================================ */
+
+.detail-section {
+    margin-bottom: 20px;
+}
+
+.history-chart-wrapper {
+    height: 250px;
+    margin-bottom: 20px;
+}
+
+.history-chart-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.history-table-wrapper {
+    overflow-x: auto;
+}
+
+/* Table */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray-500);
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.data-table tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 14px;
+}
+
+.data-table tbody tr:hover {
+    background: var(--gray-50);
+}
+
+.col-numeric {
+    text-align: right;
+    font-weight: 600;
+    color: var(--orange);
+}
+
+/* Badges source */
+.badge-source {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.source-mesure_reelle { background: var(--primary-light); color: #166534; }
+.source-estimation { background: #fef3c7; color: #92400e; }
+.source-facture { background: #dbeafe; color: #1e40af; }
+.source-api_carbon { background: #f3e8ff; color: #7c3aed; }
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--gray-400);
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    display: block;
+    color: var(--gray-300);
+}
+
+.empty-state p {
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 13px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 900px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .carbon-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .page-header {
+        flex-direction: column;
+    }
+    
+    .header-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 640px) {
+    .page-wrapper {
+        padding: 16px;
+    }
+    
+    .header-title h1 {
+        font-size: 22px;
+    }
+    
+    .card-score {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .info-value {
+        text-align: left;
+    }
+}

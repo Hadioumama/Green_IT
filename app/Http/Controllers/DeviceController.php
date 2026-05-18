@@ -28,7 +28,18 @@ class DeviceController extends Controller
                 ->count(),
         ];
         
-        return view('index', compact('devices', 'stats'));
+    $devicesAremplacer = Device::with('user')
+        ->where(function($query) {
+            $query->where('statut', 'recycle');
+        })
+        ->orWhere(function($query) {
+            $query->whereNotNull('date_achat')
+                  ->whereNotNull('duree_vie_annees')
+                  ->whereRaw('TIMESTAMPDIFF(YEAR, date_achat, CURDATE()) >= duree_vie_annees');
+        })
+        ->get();
+
+    return view('index', compact('devices', 'stats', 'devicesAremplacer'));
     }
 
     /**

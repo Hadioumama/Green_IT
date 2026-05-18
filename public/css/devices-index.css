@@ -35,20 +35,7 @@ body {
 }
 
 /* ========== HEADER ========== */
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 28px;
-    flex-wrap: wrap;
-    gap: 16px;
-}
 
-.header-brand {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
 
 .brand-icon {
     font-size: 2.5rem;

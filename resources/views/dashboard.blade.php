@@ -28,7 +28,7 @@
     {{-- ✅ BOUTONS D'ACCÈS --}}
     <div class="card" style="margin-top: 20px;">
         <h2>Navigation</h2>
-        <a href="{{ route('devices.index') }}" class="btn">📋 Gérer les équipements</a>
+        <a href="{{ route('devicesindex') }}" class="btn">📋 Gérer les équipements</a>
         <a href="{{ route('energy.index') }}" class="btn" style="margin-left:10px;">⚡ Consommation énergétique</a>
     </div>
 </main>
