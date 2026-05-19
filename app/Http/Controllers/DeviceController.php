@@ -12,9 +12,15 @@ class DeviceController extends Controller
     /**
      * Affiche la liste des équipements avec stats Green IT
      */
-    public function index()
-    {
-        $devices = Device::with('user')->paginate(10);
+  public function index(Request $request)
+    {    
+         $query = Device::with('user');
+
+        if ($request->filled('statut')) {
+        $query->where('statut', $request->statut);
+    }
+
+    $devices = $query->paginate(10)->withQueryString();
         
         // Stats globales pour le dashboard
         $stats = [

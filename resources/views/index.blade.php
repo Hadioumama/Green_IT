@@ -383,6 +383,68 @@
     padding: 14px 16px;
     background: #fff7ed;
     border-radius: 12px;
+}
+/* ═══════════════════════════════════════════════ */
+/* FILTRE DÉROULANT */
+/* ═══════════════════════════════════════════════ */
+
+.table-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.filter-form {
+    margin: 0;
+}
+
+.filter-dropdown {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.filter-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 8px 36px 8px 14px;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+    cursor: pointer;
+    outline: none;
+    min-width: 160px;
+    transition: all 0.2s ease;
+}
+
+.filter-select:hover {
+    border-color: #cbd5e1;
+}
+
+.filter-select:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+.filter-icon {
+    position: absolute;
+    right: 12px;
+    pointer-events: none;
+    font-size: 16px;
+    color: #94a3b8;
+}
+
+/* Option sélectionnée = style actif */
+.filter-select option:checked {
+    font-weight: 600;
+    color: #22c55e;
+}
 </style>
 </head>
 <body>
@@ -530,13 +592,29 @@
     </div>
 
     <!-- TABLEAU -->
-    <div class="table-card">
-        <div class="table-header">
-            <h2><i class="ph ph-list"></i> Liste des équipements</h2>
-            <div class="table-filters">
-                <span class="badge badge-actif">{{ $stats['devices_actifs'] }} actifs</span>
+    <div class="table-header">
+    <h2><i class="ph ph-list"></i> Liste des équipements</h2>
+    <div class="table-filters">
+        <span class="badge badge-actif">{{ $stats['devices_actifs'] }} actifs</span>
+        
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- FILTRE PAR STATUT -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <form action="{{ route('devices.index') }}" method="GET" class="filter-form">
+            <div class="filter-dropdown">
+                <select name="statut" onchange="this.form.submit()" class="filter-select">
+                    <option value="">Tous les statuts</option>
+                    <option value="actif" {{ request('statut') == 'actif' ? 'selected' : '' }}>Actif</option>
+                    <option value="en_reparation" {{ request('statut') == 'en_reparation' ? 'selected' : '' }}>En réparation</option>
+                    <option value="hors_service" {{ request('statut') == 'hors_service' ? 'selected' : '' }}>Hors service</option>
+                    <option value="stock" {{ request('statut') == 'stock' ? 'selected' : '' }}>En stock</option>
+                    <option value="recycle" {{ request('statut') == 'recycle' ? 'selected' : '' }}>À recycler</option>
+                </select>
+                <i class="ph ph-faders filter-icon"></i>
             </div>
-        </div>
+        </form>
+    </div>
+</div>
 
         <div class="table-responsive">
             <table class="data-table">
