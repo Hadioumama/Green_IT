@@ -2,743 +2,418 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Parc informatique — Green IT</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — Green IT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="{{ asset('css/devices-index.css') }}">
-<style>
-    /* ═══════════════════════════════════════════════ */
-/* HEADER AVEC ALERTE BADGE */
-/* ═══════════════════════════════════════════════ */
-
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    padding: 0 4px;
-}
-
-.header-brand {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-/* ═══════════════════════════════════════════════ */
-/* BADGE ALERTE (petit carré) */
-/* ═══════════════════════════════════════════════ */
-
-.alert-badge {
-    position: relative;
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, #f97316, #ea580c);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
-}
-
-.alert-badge:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
-}
-
-.alert-badge i {
-    font-size: 20px;
-    color: white;
-}
-
-.alert-count {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 20px;
-    height: 20px;
-    background: #dc2626;
-    color: white;
-    border-radius: 50%;
-    font-size: 11px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid white;
-}
-/* ═══════════════════════════════════════════════ */
-/* INFOBULLE AVEC LISTE COMPLÈTE */
-/* ═══════════════════════════════════════════════ */
-
-.alert-tooltip {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    width: 320px;
-    max-height: 400px;           /* Hauteur max */
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    border: 1px solid #fed7aa;
-    padding: 16px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-    z-index: 1000;
-    
-    /* Flexbox pour structure */
-    display: flex;
-    flex-direction: column;
-}
-
-/* Flèche */
-.alert-tooltip::before {
-    content: '';
-    position: absolute;
-    top: -6px;
-    right: 16px;
-    width: 12px;
-    height: 12px;
-    background: white;
-    border-left: 1px solid #fed7aa;
-    border-top: 1px solid #fed7aa;
-    transform: rotate(45deg);
-}
-
-/* Afficher au survol */
-.alert-badge:hover .alert-tooltip {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-/* Header */
-.tooltip-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #f1f5f9;
-    flex-shrink: 0;            /* Ne pas rétrécir */
-}
-
-.tooltip-header i {
-    font-size: 18px;
-    color: #f97316;
-}
-
-.tooltip-header span {
-    font-size: 14px;
-    font-weight: 600;
-    color: #7c2d12;
-}
-
-/* Liste complète avec scroll */
-.tooltip-list-full {
-    overflow-y: auto;          /* Scroll vertical */
-    max-height: 280px;         /* Hauteur avant scroll */
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    
-    /* Style de la scrollbar */
-    scrollbar-width: thin;
-    scrollbar-color: #f97316 #fff7ed;
-}
-
-.tooltip-list-full::-webkit-scrollbar {
-    width: 6px;
-}
-
-.tooltip-list-full::-webkit-scrollbar-track {
-    background: #fff7ed;
-    border-radius: 3px;
-}
-
-.tooltip-list-full::-webkit-scrollbar-thumb {
-    background: #f97316;
-    border-radius: 3px;
-}
-
-/* Item cliquable */
-.tooltip-item-link {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 12px;
-    background: #fff7ed;
-    border-radius: 8px;
-    border-left: 3px solid #f97316;
-    text-decoration: none;
-    transition: all 0.2s;
-}
-
-.tooltip-item-link:hover {
-    background: #ffedd5;
-    transform: translateX(4px);
-}
-
-.tooltip-item-main {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.tooltip-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: #7c2d12;
-}
-
-.tooltip-reason {
-    font-size: 11px;
-    color: #c2410c;
-}
-
-.tooltip-item-link > i {
-    color: #f97316;
-    font-size: 16px;
-}
-
-/* Footer */
-.tooltip-footer {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px dashed #fed7aa;
-    text-align: center;
-    flex-shrink: 0;
-}
-
-.tooltip-hint {
-    font-size: 11px;
-    color: #9a3412;
-    font-style: italic;
-}
-
-/* ═══════════════════════════════════════════════ */
-/* BOUTON AJOUTER (inchangé) */
-/* ═══════════════════════════════════════════════ */
-
-.btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
-    background: #22c55e;
-    color: white;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.2s;
-    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
-}
-
-.btn-primary:hover {
-    background: #16a34a;
-    transform: translateY(-1px);
-}
-/* ═══════════════════════════════════════════════ */
-/* MODAL - Liste complète */
-/* ═══════════════════════════════════════════════ */
-
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.2s ease;
-}
-
-.modal-overlay.active {
-    display: flex;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.modal-content {
-    background: white;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 80vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-    animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-    from { 
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to { 
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Header */
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 24px;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-.modal-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #7c2d12;
-}
-
-.modal-title i {
-    font-size: 22px;
-    color: #f97316;
-}
-
-.modal-count {
-    background: #f97316;
-    color: white;
-    padding: 2px 10px;
-    border-radius: 12px;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-.modal-close {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    border: none;
-    background: #f1f5f9;
-    color: #64748b;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.modal-close:hover {
-    background: #e2e8f0;
-    color: #334155;
-}
-
-/* Body avec scroll */
-.modal-body {
-    overflow-y: auto;
-    padding: 16px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-.tooltip-more {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 6px 12px;
-    background-color: #e76d26;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.tooltip-more:hover {
-    background-color: #d34b15;
-    transform: translateX(3px);
-}
-/* Item du modal */
-.modal-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
-    background: #fff7ed;
-    border-radius: 12px;
-}
-/* ═══════════════════════════════════════════════ */
-/* FILTRE DÉROULANT */
-/* ═══════════════════════════════════════════════ */
-
-.table-filters {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.filter-form {
-    margin: 0;
-}
-
-.filter-dropdown {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-}
-
-.filter-select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    padding: 8px 36px 8px 14px;
-    background: #ffffff;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 10px;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    color: #475569;
-    cursor: pointer;
-    outline: none;
-    min-width: 160px;
-    transition: all 0.2s ease;
-}
-
-.filter-select:hover {
-    border-color: #cbd5e1;
-}
-
-.filter-select:focus {
-    border-color: #22c55e;
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
-}
-
-.filter-icon {
-    position: absolute;
-    right: 12px;
-    pointer-events: none;
-    font-size: 16px;
-    color: #94a3b8;
-}
-
-/* Option sélectionnée = style actif */
-.filter-select option:checked {
-    font-weight: 600;
-    color: #22c55e;
-}
-</style>
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v=3">
 </head>
 <body>
-<!-- HEADER -->
-<header class="page-header">
-    <div class="header-brand">
-        <i class="ph ph-leaf brand-icon"></i>
-        <div>
-            <h1>Parc informatique</h1>
-            <span class="subtitle">Gestion énergétique et empreinte carbone</span>
+
+<div class="app" id="app">
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SIDEBAR COLLAPSIBLE -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-logo">
+                <i class="ph ph-leaf"></i>
+            </div>
+            <span class="brand-text">Green IT</span>
+            <button class="sidebar-toggle" id="sidebarToggle" title="Réduire/Agrandir">
+                <i class="ph ph-caret-left" id="toggleIcon"></i>
+            </button>
         </div>
-    </div>
-    
+
+        <nav class="sidebar-nav">
+            <a href="{{ route('dashboard') }}" class="nav-item active">
+                <div class="nav-icon">
+                    <i class="ph ph-squares-four"></i>
+                </div>
+                <span>Dashboard</span>
+            </a>
+            <a href="{{ route('devices.index') }}" class="nav-item">
+                <div class="nav-icon">
+                    <i class="ph ph-desktop"></i>
+                </div>
+                <span>Parc informatique</span>
+            </a>
+            <a href="{{ route('energy.index') }}" class="nav-item">
+                <div class="nav-icon">
+                    <i class="ph ph-lightning"></i>
+                </div>
+                <span>Consommation</span>
+            </a>
+            <a href="{{ route('devices.remplacer') }}" class="nav-item">
+                <div class="nav-icon">
+                    <i class="ph ph-warning"></i>
+                </div>
+                <span>Alertes</span>
+                @if($kpis['a_remplacer'] > 0)
+                    <span class="nav-badge">{{ $kpis['a_remplacer'] }}</span>
+                @endif
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="user-avatar">
+                    {{ substr(Auth::user()->name, 0, 1) }}
+                </div>
+                <div class="user-info">
+                    <span class="user-name">{{ Auth::user()->name }}</span>
+                    <span class="user-role">Administrateur</span>
+                </div>
+            </div>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn-logout-sidebar" title="Déconnexion">
+                    <i class="ph ph-sign-out"></i>
+                </button>
+            </form>
+        </div>
+    </aside>
+
     <!-- ═══════════════════════════════════════════════ -->
-    <!-- ZONE DROITE : Alerte + Bouton -->
+    <!-- CONTENU DROIT -->
     <!-- ═══════════════════════════════════════════════ -->
-    <div class="header-actions">
-        @if($devicesAremplacer->count() > 0)
-        <!-- Petit carré alerte -->
-        <div class="alert-badge" id="alertBadge">
-            <i class="ph ph-warning"></i>
-            <span class="alert-count">{{ $devicesAremplacer->count() }}</span>
-            <!-- Infobulle (aperçu au survol) -->
-            <div class="alert-tooltip" id="alertTooltip">
-                <!-- Vue APERÇU (par défaut) -->
-                <div class="tooltip-view" id="tooltipPreview">
-                    <div class="tooltip-header">
-                        <i class="ph ph-warning-circle"></i>
-                        <span>Équipements à remplacer</span>
+    <main class="content" id="content">
+
+        <!-- Header -->
+        <header class="content-header">
+            <div>
+                <h1>Tableau de bord</h1>
+                <p>Bienvenue, voici l'état de votre parc</p>
+            </div>
+            <div class="header-actions">
+                <div class="search-box">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="text" placeholder="Rechercher...">
+                </div>
+                <div class="header-date">
+                    <i class="ph ph-calendar"></i>
+                    <span>{{ now()->format('d M Y') }}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- KPI Cards -->
+        <div class="kpi-row">
+            <div class="kpi-box kpi-total">
+                <div class="kpi-glow"></div>
+                <div class="kpi-top">
+                    <span class="kpi-title">Équipements</span>
+                    <div class="kpi-icon-box">
+                        <i class="ph ph-desktop"></i>
                     </div>
-                    <div class="tooltip-list">
-                        @foreach($devicesAremplacer->take(5) as $device)
+                </div>
+                <div class="kpi-number">{{ $kpis['total_devices'] }}</div>
+                <div class="kpi-trend">
+                    <i class="ph ph-trend-up"></i>
+                    <span>Total actif</span>
+                </div>
+            </div>
+
+            <div class="kpi-box kpi-energy">
+                <div class="kpi-glow"></div>
+                <div class="kpi-top">
+                    <span class="kpi-title">Consommation</span>
+                    <div class="kpi-icon-box">
+                        <i class="ph ph-lightning"></i>
+                    </div>
+                </div>
+                <div class="kpi-number">{{ number_format($kpis['total_conso'], 0) }} <small>kWh</small></div>
+                <div class="kpi-trend">
+                    <i class="ph ph-trend-up"></i>
+                    <span>Annuel</span>
+                </div>
+            </div>
+
+            <div class="kpi-box kpi-co2">
+                <div class="kpi-glow"></div>
+                <div class="kpi-top">
+                    <span class="kpi-title">Émissions CO₂</span>
+                    <div class="kpi-icon-box">
+                        <i class="ph ph-cloud"></i>
+                    </div>
+                </div>
+                <div class="kpi-number">{{ number_format($kpis['total_co2'], 0) }} <small>kg</small></div>
+                <div class="kpi-trend">
+                    <i class="ph ph-trend-down"></i>
+                    <span>Usage</span>
+                </div>
+            </div>
+
+            <div class="kpi-box kpi-fab">
+                <div class="kpi-glow"></div>
+                <div class="kpi-top">
+                    <span class="kpi-title">Fabrication</span>
+                    <div class="kpi-icon-box">
+                        <i class="ph ph-factory"></i>
+                    </div>
+                </div>
+                <div class="kpi-number">{{ number_format($kpis['total_fab_co2'], 0) }} <small>kg</small></div>
+                <div class="kpi-trend">
+                    <i class="ph ph-trend-down"></i>
+                    <span>Embodied</span>
+                </div>
+            </div>
+
+            <div class="kpi-box kpi-score">
+                <div class="kpi-glow"></div>
+                <div class="kpi-top">
+                    <span class="kpi-title">Score Green</span>
+                    <div class="kpi-icon-box">
+                        <i class="ph ph-chart-bar"></i>
+                    </div>
+                </div>
+                <div class="kpi-number">{{ $kpis['score_moyen'] }}<<small>/100</small></div>
+                <div class="kpi-trend">
+                    <i class="ph ph-trend-up"></i>
+                    <span>Moyenne</span>
+                </div>
+            </div>
+
+            <div class="kpi-box kpi-alert">
+                <div class="kpi-glow"></div>
+                <div class="kpi-top">
+                    <span class="kpi-title">Alertes</span>
+                    <div class="kpi-icon-box">
+                        <i class="ph ph-warning"></i>
+                    </div>
+                </div>
+                <div class="kpi-number">{{ $kpis['a_remplacer'] }}</div>
+                <div class="kpi-trend">
+                    <i class="ph ph-warning-circle"></i>
+                    <span>À remplacer</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="charts-row">
+            <!-- Donut Chart -->
+            <div class="chart-card chart-large">
+                <div class="chart-header">
+                    <h3><i class="ph ph-chart-pie-slice"></i> Répartition par type</h3>
+                    <button class="chart-menu"><i class="ph ph-dots-three"></i></button>
+                </div>
+                <div class="chart-body">
+                    <div class="donut-container">
+                        <div class="donut-chart">
+                            <svg viewBox="0 0 36 36" class="donut">
+                                @php
+                                    $total = $parType->sum('count');
+                                    $offset = 0;
+                                    $colors = ['#22c55e', '#3b82f6', '#f97316', '#a855f7', '#ec4899', '#06b6d4', '#eab308', '#64748b'];
+                                @endphp
+                                @foreach($parType as $index => $type)
+                                    @php
+                                        $pct = $total > 0 ? ($type->count / $total) * 100 : 0;
+                                        $dash = $pct * 0.942;
+                                        $color = $colors[$index % count($colors)];
+                                    @endphp
+                                    <circle cx="18" cy="18" r="15.915"
+                                        fill="none"
+                                        stroke="{{ $color }}"
+                                        stroke-width="3"
+                                        stroke-dasharray="{{ $dash }} 100"
+                                        stroke-dashoffset="{{ -$offset }}"
+                                        class="donut-segment"
+                                    />
+                                    @php $offset += $dash; @endphp
+                                @endforeach
+                                <circle cx="18" cy="18" r="13" fill="#0f172a"/>
+                            </svg>
+                            <div class="donut-center">
+                                <span class="donut-value">{{ $total }}</span>
+                                <span class="donut-label">Total</span>
+                            </div>
+                        </div>
+                        <div class="donut-legend">
+                            @foreach($parType as $index => $type)
+                                @php $color = $colors[$index % count($colors)]; @endphp
+                                <div class="legend-item">
+                                    <span class="legend-dot" style="background: {{ $color }}"></span>
+                                    <span class="legend-name">{{ $type->type }}</span>
+                                    <span class="legend-value">{{ $type->count }}</span>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bar Chart - Top Consommation -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="ph ph-lightning"></i> Top consommation</h3>
+                </div>
+                <div class="chart-body">
+                    <div class="bar-chart">
+                        @php
+                            $maxConso = $topConso->max('conso_annuelle_kwh') ?: 1;
+                        @endphp
+                        @foreach($topConso as $device)
                             @php
-                                $raisons = [];
-                                if ($device->statut === 'recycle') $raisons[] = 'À recycler';
-                                $age = $device->date_achat ? now()->diffInYears($device->date_achat) : null;
-                                if ($age !== null && $device->duree_vie_annees && $age >= $device->duree_vie_annees) {
-                                    $raisons[] = "Âge dépassé";
-                                }
+                                $pct = ($device->conso_annuelle_kwh / $maxConso) * 100;
+                                $barColors = ['#22c55e', '#3b82f6', '#f97316', '#a855f7', '#ec4899'];
+                                $barColor = $barColors[$loop->index % count($barColors)];
                             @endphp
-                            <div class="tooltip-item">
-                                <span class="tooltip-name">{{ $device->nom }}</span>
-                                <span class="tooltip-reason">{{ implode(' + ', $raisons) }}</span>
+                            <div class="bar-item">
+                                <div class="bar-label">
+                                    <span class="bar-name">{{ $device->nom }}</span>
+                                    <span class="bar-type">{{ $device->type }}</span>
+                                </div>
+                                <div class="bar-track">
+                                    <div class="bar-fill" style="width: {{ $pct }}%; background: {{ $barColor }}; box-shadow: 0 0 10px {{ $barColor }}40;"></div>
+                                </div>
+                                <span class="bar-value">{{ number_format($device->conso_annuelle_kwh, 0) }} kWh</span>
                             </div>
                         @endforeach
-                        @if($devicesAremplacer->count()>3)
-                            <a href="{{ route('devices.remplacer') }}" class="tooltip-more">
-                             Voir les {{ $devicesAremplacer->count() }} équipements →
-                           </a>
-@endif
                     </div>
-                    
                 </div>
-                
-                <!-- Vue COMPLÈTE (cachée par défaut) -->
-                <div class="tooltip-view tooltip-full" id="tooltipFull" style="display: none;">
-                    <div class="tooltip-header">
-                        <button class="btn-back" onclick="showPreview(event)">
-                            <i class="ph ph-arrow-left"></i>
-                        </button>
-                        <span>Tous les équipements à remplacer</span>
-                    </div>
-                    <div class="tooltip-list tooltip-list-scroll">
-                        @foreach($devicesAremplacer as $device)
+            </div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="charts-row">
+            <!-- Bar Chart - Scores -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="ph ph-trend-down"></i> Scores Green IT</h3>
+                </div>
+                <div class="chart-body">
+                    <div class="bar-chart">
+                        @foreach($worstScore as $device)
                             @php
-                                $raisons = [];
-                                if ($device->statut === 'recycle') $raisons[] = 'À recycler';
-                                $age = $device->date_achat ? now()->diffInYears($device->date_achat) : null;
-                                if ($age !== null && $device->duree_vie_annees && $age >= $device->duree_vie_annees) {
-                                    $raisons[] = "Âge dépassé ({$age}/{$device->duree_vie_annees} ans)";
-                                }
-                                $raisonTexte = implode(' + ', $raisons) ?: 'À remplacer';
+                                $score = $device->score_green_it ?? 0;
+                                $pct = $score;
+                                $scoreColor = $score >= 70 ? '#22c55e' : ($score >= 40 ? '#eab308' : '#ef4444');
                             @endphp
-                            <a href="{{ route('devices.show', $device) }}" class="tooltip-item tooltip-item-link">
-                                <div class="tooltip-item-main">
-                                    <span class="tooltip-name">{{ $device->nom }}</span>
-                                    <span class="tooltip-reason">{{ $raisonTexte }}</span>
+                            <div class="bar-item">
+                                <div class="bar-label">
+                                    <span class="bar-name">{{ $device->nom }}</span>
+                                    <span class="bar-type">{{ $device->type }}</span>
                                 </div>
-                                <i class="ph ph-caret-right"></i>
-                            </a>
+                                <div class="bar-track">
+                                    <div class="bar-fill" style="width: {{ $pct }}%; background: {{ $scoreColor }}; box-shadow: 0 0 10px {{ $scoreColor }}40;"></div>
+                                </div>
+                                <span class="bar-value" style="color: {{ $scoreColor }}">{{ $score }}</span>
+                            </div>
                         @endforeach
                     </div>
                 </div>
-                
             </div>
-        </div>
-        @endif
-       
-        <a href="{{ route('devices.create') }}" class="btn btn-primary">
-            <i class="ph ph-plus"></i> Ajouter un équipement
-        </a>
-    </div>
-</header>
 
-    <!-- MESSAGE -->
-    @if(session('success'))
-        <div class="alert alert-success">
-            <i class="ph ph-check-circle"></i>
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <!-- STATS CARDS -->
-    <div class="stats-grid">
-        <div class="stat-card stat-blue">
-            <i class="ph ph-desktop"></i>
-            <div class="stat-info">
-                <span class="stat-value">{{ $stats['total_devices'] }}</span>
-                <span class="stat-label">Équipements</span>
-            </div>
-        </div>
-        
-        <div class="stat-card stat-green">
-            <i class="ph ph-lightning"></i>
-            <div class="stat-info">
-                <span class="stat-value">{{ number_format($stats['total_conso_kwh'], 0) }}</span>
-                <span class="stat-label">kWh/an</span>
-            </div>
-        </div>
-        
-        <div class="stat-card stat-orange">
-            <i class="ph ph-cloud"></i>
-            <div class="stat-info">
-                <span class="stat-value">{{ number_format($stats['total_emission_co2'], 0) }}</span>
-                <span class="stat-label">kg CO₂/an</span>
-            </div>
-        </div>
-        
-        <div class="stat-card stat-red">
-            <i class="ph ph-factory"></i>
-            <div class="stat-info">
-                <span class="stat-value">{{ number_format($stats['total_fabrication_co2'], 0) }}</span>
-                <span class="stat-label">kg CO₂ fab.</span>
-            </div>
-        </div>
-        
-        <div class="stat-card stat-purple">
-            <i class="ph ph-warning"></i>
-            <div class="stat-info">
-                <span class="stat-value">{{ $stats['devices_a_remplacer'] }}</span>
-          
-                <span class="stat-label">À remplacer</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- TABLEAU -->
-    <div class="table-header">
-    <h2><i class="ph ph-list"></i> Liste des équipements</h2>
-    <div class="table-filters">
-        <span class="badge badge-actif">{{ $stats['devices_actifs'] }} actifs</span>
-        
-        <!-- ═══════════════════════════════════════════════ -->
-        <!-- FILTRE PAR STATUT -->
-        <!-- ═══════════════════════════════════════════════ -->
-        <form action="{{ route('devices.index') }}" method="GET" class="filter-form">
-            <div class="filter-dropdown">
-                <select name="statut" onchange="this.form.submit()" class="filter-select">
-                    <option value="">Tous les statuts</option>
-                    <option value="actif" {{ request('statut') == 'actif' ? 'selected' : '' }}>Actif</option>
-                    <option value="en_reparation" {{ request('statut') == 'en_reparation' ? 'selected' : '' }}>En réparation</option>
-                    <option value="hors_service" {{ request('statut') == 'hors_service' ? 'selected' : '' }}>Hors service</option>
-                    <option value="stock" {{ request('statut') == 'stock' ? 'selected' : '' }}>En stock</option>
-                    <option value="recycle" {{ request('statut') == 'recycle' ? 'selected' : '' }}>À recycler</option>
-                </select>
-                <i class="ph ph-faders filter-icon"></i>
-            </div>
-        </form>
-    </div>
-</div>
-
-        <div class="table-responsive">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Équipement</th>
-                        <th>Type</th>
-                        <th>Responsable</th>
-                        <th class="col-numeric">Puissance</th>
-                        <th class="col-numeric">Conso/an</th>
-                        <th class="col-numeric">CO₂/an</th>
-                        <th class="col-numeric">Score</th>
-                        <th>Statut</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($devices as $device)
-                        <tr>
-                            <!-- Nom + détails -->
-                            <td>
-                                <div class="device-name">
-                                    <span class="device-title">{{ $device->nom }}</span>
-                                    <span class="device-meta">{{ $device->marque }} {{ $device->modele }}</span>
-                                </div>
-                            </td>
-                            
-                            <!-- Type -->
-                            <td>
-                                <span class="badge-type badge-{{ strtolower($device->type) }}">
-                                    {{ $device->type }}
-                                </span>
-                            </td>
-                            
-                            <!-- Responsable -->
-                            <td>
-                                @if($device->user)
-                                    <div class="user-info">
-                                        <i class="ph ph-user"></i>
-                                        <span>{{ $device->user->name }}</span>
+            <!-- Alerts -->
+            <div class="chart-card chart-alert">
+                <div class="chart-header">
+                    <h3><i class="ph ph-warning"></i> Alertes</h3>
+                    @if($alertes->count() > 0)
+                        <a href="{{ route('devices.remplacer') }}" class="chart-link">Voir tout</a>
+                    @endif
+                </div>
+                <div class="chart-body">
+                    @if($alertes->count() > 0)
+                        <div class="alert-cards">
+                            @foreach($alertes as $device)
+                                @php
+                                    $raisons = [];
+                                    if ($device->statut === 'recycle') $raisons[] = 'À recycler';
+                                    $age = $device->date_achat ? now()->diffInYears($device->date_achat) : null;
+                                    if ($age !== null && $device->duree_vie_annees && $age >= $device->duree_vie_annees) {
+                                        $raisons[] = "Âge dépassé";
+                                    }
+                                @endphp
+                                <a href="{{ route('devices.edit', $device) }}" class="alert-card-item">
+                                    <div class="alert-card-icon">
+                                        <i class="ph ph-warning"></i>
                                     </div>
-                                @else
-                                    <span class="text-muted">Non assigné</span>
-                                @endif
-                            </td>
-                            
-                            <!-- Puissance -->
-                            <td class="col-numeric">
-                                <span class="value-watt">{{ $device->puissance_watt ? number_format($device->puissance_watt, 0) . ' W' : '-' }}</span>
-                            </td>
-                            
-                            <!-- Consommation -->
-                            <td class="col-numeric">
-                                <span class="value-kwh">{{ $device->conso_annuelle_kwh ? number_format($device->conso_annuelle_kwh, 0) . ' kWh' : '-' }}</span>
-                            </td>
-                            
-                            <!-- Émissions -->
-                            <td class="col-numeric">
-                                @if($device->emission_co2_kg)
-                                    <span class="value-co2 {{ $device->emission_co2_kg > 100 ? 'co2-high' : 'co2-low' }}">
-                                        {{ number_format($device->emission_co2_kg, 0) }} kg
-                                    </span>
-                                @else
-                                    <span class="text-muted">-</span>
-                                @endif
-                            </td>
-                            
-                            <!-- Score Green IT -->
-                            <td class="col-numeric">
-                                <div class="score-ring score-{{ $device->score_green_it >= 70 ? 'good' : ($device->score_green_it >= 40 ? 'medium' : 'bad') }}">
-                                    {{ $device->score_green_it }}
-                                </div>
-                            </td>
-                            
-                            <!-- Statut -->
-                            <td>
-                                <span class="badge-status status-{{ $device->statut }}">
-                                    {{ 
-                                        $device->statut == 'actif' ? 'Actif' :
-                                        ($device->statut == 'stock' ? 'Stock' :
-                                        ($device->statut == 'en_reparation' ? 'Réparation' :
-                                        ($device->statut == 'hors_service' ? 'Hors service' : 'À recycler')))
-                                    }}
-                                </span>
-                            </td>
-                            
-                            <!-- Actions -->
-                            <td>
-                                <div class="actions">
-                                    <a href="{{ route('devices.show', $device) }}" class="btn-icon btn-view" title="Voir">
-                                        <i class="ph ph-eye"></i>
-                                    </a>
-                                    <a href="{{ route('devices.edit', $device) }}" class="btn-icon btn-edit" title="Modifier">
-                                        <i class="ph ph-pencil"></i>
-                                    </a>
-                                    <form action="{{ route('devices.destroy', $device) }}" method="POST" class="inline-form">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-icon btn-delete" title="Supprimer" onclick="return confirm('Supprimer « {{ $device->nom }} » ?')">
-                                            <i class="ph ph-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="9" class="empty-state">
-                                <i class="ph ph-desktop"></i>
-                                <p>Aucun équipement enregistré</p>
-                                <a href="{{ route('devices.create') }}" class="btn btn-sm">Ajouter le premier</a>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                    <div class="alert-card-info">
+                                        <span class="alert-card-name">{{ $device->nom }}</span>
+                                        <span class="alert-card-reason">{{ implode(' + ', $raisons) ?: 'À remplacer' }}</span>
+                                    </div>
+                                    <i class="ph ph-caret-right"></i>
+                                </a>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="empty-state-dark">
+                            <i class="ph ph-check-circle"></i>
+                            <span>Aucune alerte</span>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="chart-card chart-actions">
+                <div class="chart-header">
+                    <h3><i class="ph ph-lightning"></i> Actions rapides</h3>
+                </div>
+                <div class="chart-body">
+                    <div class="action-grid">
+                        <a href="{{ route('devices.create') }}" class="action-btn action-add">
+                            <div class="action-icon">
+                                <i class="ph ph-plus"></i>
+                            </div>
+                            <span>Nouvel équipement</span>
+                        </a>
+                        <a href="{{ route('energy.create') }}" class="action-btn action-energy">
+                            <div class="action-icon">
+                                <i class="ph ph-lightning"></i>
+                            </div>
+                            <span>Consommation</span>
+                        </a>
+                        <a href="{{ route('devices.index') }}" class="action-btn action-view">
+                            <div class="action-icon">
+                                <i class="ph ph-list"></i>
+                            </div>
+                            <span>Voir le parc</span>
+                        </a>
+                        <a href="{{ route('devices.remplacer') }}" class="action-btn action-alert">
+                            <div class="action-icon">
+                                <i class="ph ph-warning"></i>
+                            </div>
+                            <span>Alertes</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Pagination -->
-        <div class="pagination-wrapper">
-            {{ $devices->links() }}
-        </div>
-    </div>
-
+    </main>
 </div>
+
+<script>
+    // Sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('content');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    const toggleIcon = document.getElementById('toggleIcon');
+    
+    // Check localStorage for saved state
+    if (localStorage.getItem('sidebarCollapsed') === 'true') {
+        sidebar.classList.add('collapsed');
+        content.classList.add('expanded');
+        toggleIcon.classList.replace('ph-caret-left', 'ph-caret-right');
+    }
+    
+    toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        content.classList.toggle('expanded');
+        
+        if (sidebar.classList.contains('collapsed')) {
+            toggleIcon.classList.replace('ph-caret-left', 'ph-caret-right');
+            localStorage.setItem('sidebarCollapsed', 'true');
+        } else {
+            toggleIcon.classList.replace('ph-caret-right', 'ph-caret-left');
+            localStorage.setItem('sidebarCollapsed', 'false');
+        }
+    });
+</script>
+
 </body>
 </html>

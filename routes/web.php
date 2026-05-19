@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\EnergyController;
+use App\Http\Controllers\DashboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +24,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ========== ÉTUDIANT 1 : DASHBOARD (NE PAS TOUCHER) ==========
 
-Route::get('/dashboard', function () {
-    return view('dashboard', ['user' => Auth::user()]);
-})->middleware('auth');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard');
 
 // ========== ÉTUDIANT 2 : DEVICES + ENERGY (TA PARTIE) ==========
 
