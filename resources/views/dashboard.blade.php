@@ -129,7 +129,37 @@ html, body {
     transition: all 0.25s ease;
     position: relative;
 }
+/* Sidebar collapsed */
+.sidebar.collapsed {
+    width: 70px;
+    min-width: 70px;
+}
 
+.sidebar.collapsed .brand-text,
+.sidebar.collapsed .nav-item span,
+.sidebar.collapsed .user-info {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-brand {
+    justify-content: center;
+    padding: 0;
+}
+
+.sidebar.collapsed .nav-item {
+    justify-content: center;
+    padding: 12px;
+}
+
+.sidebar.collapsed .sidebar-footer {
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Content expanded */
+.content.expanded {
+    margin-left: 70px;
+}
 .nav-item:hover {
     background: rgba(255, 255, 255, 0.03);
     color: var(--text-primary);
