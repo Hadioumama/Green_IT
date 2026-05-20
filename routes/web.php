@@ -31,7 +31,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 // ========== ÉTUDIANT 2 : DEVICES + ENERGY (TA PARTIE) ==========
 
 Route::middleware('auth')->group(function () {
-    
+    Route::get('/devices/a-remplacer', [DeviceController::class, 'aRemplacer'])->name('devices.remplacer');
     // Devices CRUD complet
     Route::get('/devices', [DeviceController::class, 'index'])->name('devices.index');
     Route::get('/devices/create', [DeviceController::class, 'create'])->name('devices.create');
@@ -46,4 +46,3 @@ Route::middleware('auth')->group(function () {
     Route::get('/energy/create', [EnergyController::class, 'createWeb'])->name('energy.create');
     Route::post('/energy', [EnergyController::class, 'storeWeb'])->name('energy.store');
 });
-Route::get('/devices/a-remplacer', [DeviceController::class, 'aRemplacer'])->name('devices.remplacer');
