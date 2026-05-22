@@ -3,1155 +3,545 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard — Green IT</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>Projet Green IT — Tableau de Bord</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  GREEN IT DASHBOARD — Sidebar Rétractable + Conso Mensuelle DH           */
-/* ═══════════════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════ */
+/*  GREEN IT DASHBOARD v3 — Centered Floating Glass Card   */
+/* ═══════════════════════════════════════════════════════ */
 
 :root {
-    --bg-primary: #0b0f19;
-    --bg-secondary: #111827;
-    --bg-card: #151b2b;
-    --bg-sidebar: #0f141f;
-    --bg-sidebar-active: rgba(16, 185, 129, 0.08);
+    --green-primary:   #10b981;
+    --green-bright:    #34d399;
+    --green-dark:      #059669;
+    --green-glow:      rgba(16,185,129,0.28);
+    --green-soft:      rgba(16, 185, 129, 0.1);
+     --green-softt:rgba(190, 204, 34, 0.88);
 
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
+    --bg-card:    rgba(244, 250, 248, 0.72);
+    --bg-inner:   rgba(255,255,255,0.055);
+    --bg-hover:   rgba(238, 241, 240, 0.09);
 
-    --accent-green: #10b981;
-    --accent-green-glow: rgba(16, 185, 129, 0.25);
-    --accent-green-soft: rgba(16, 185, 129, 0.12);
+    --border:     rgba(8, 25, 16, 0.2);
+    --border-dim: rgba(177, 165, 165, 0.08);
 
-    --accent-blue: #3b82f6;
-    --accent-blue-glow: rgba(59, 130, 246, 0.25);
-    --accent-blue-soft: rgba(59, 130, 246, 0.12);
+    --text-1: #f4f6f5dd;
+    --text-2: #e6f3ec;
+    --text-3: #10b981;
 
-    --accent-orange: #f59e0b;
-    --accent-orange-glow: rgba(245, 158, 11, 0.25);
-    --accent-orange-soft: rgba(245, 158, 11, 0.12);
+    --cyan:   #0cc5e6;
+    --amber:  #f79616de;
+ 
+    --blue:   #76b8f9ea;
+    --purple: #4c12d3;
 
-    --accent-red: #ef4444;
-    --accent-red-glow: rgba(239, 68, 68, 0.25);
-    --accent-red-soft: rgba(239, 68, 68, 0.12);
-
-    --accent-purple: #8b5cf6;
-    --accent-purple-glow: rgba(139, 92, 246, 0.25);
-    --accent-purple-soft: rgba(139, 92, 246, 0.12);
-
-    --accent-cyan: #06b6d4;
-    --accent-cyan-glow: rgba(6, 182, 212, 0.25);
-    --accent-cyan-soft: rgba(6, 182, 212, 0.12);
-
-    --border: rgba(148, 163, 184, 0.08);
-    --border-hover: rgba(148, 163, 184, 0.15);
-    --border-active: rgba(16, 185, 129, 0.2);
+    --r:      14px;
+    --r-lg:   22px;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
+/* ── PAGE: full-screen centered ── */
 html, body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    line-height: 1.4;
+    font-family: 'Exo 2', sans-serif;
+    color: var(--text-1);
     height: 100vh;
-    font-size: 13px;
+    overflow: hidden;
     -webkit-font-smoothing: antialiased;
-    overflow: hidden;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  APP LAYOUT — Full height sans scroll                                      */
-/* ═══════════════════════════════════════════════════════════════════════════ */
-
-.app {
     display: flex;
-    height: 100vh;
-    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    /* background image from Laravel */
+    background-image: url('{{ asset("images/img.jfif") }}');
+    background-size: cover;
+    background-position: center;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  SIDEBAR — Rétractable avec toggle                                         */
-/* ═══════════════════════════════════════════════════════════════════════════ */
+/* Overlay tint — léger pour laisser l'image visible */
+body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg,
+        rgba(2,12,8,0.42) 0%,
+        rgba(3,18,14,0.32) 50%,
+        rgba(2,10,18,0.45) 100%
+    );
+    z-index: 0;
+    pointer-events: none;
+}
 
+/* ── OUTER SHELL — the floating card ── */
+.shell {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width:  min(1380px, 85vw);
+    height: min(860px,  85vh);
+    /* fond semi-transparent pour laisser l'image transparaître */
+    background: rgba(143, 158, 151, 0.45);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border-radius: var(--r-lg);
+    border: 1px solid rgba(52,211,153,0.18);
+    box-shadow:
+        0 32px 80px rgba(0,0,0,0.45),
+        0  0  40px rgba(16,185,129,0.06) inset,
+        0  1px 0   rgba(255,255,255,0.12) inset;
+    overflow: hidden;
+    animation: shellIn 0.8s cubic-bezier(.4,0,.2,1) both;
+}
+
+@keyframes shellIn {
+    from { opacity:0; transform:scale(0.97) translateY(14px); }
+    to   { opacity:1; transform:scale(1)    translateY(0); }
+}
+
+/* ── SIDEBAR ── */
 .sidebar {
-    width: 240px;
-    min-width: 240px;
-    background: var(--bg-sidebar);
-    border-right: 1px solid var(--border);
+    width: 220px;
+    min-width: 220px;
     display: flex;
     flex-direction: column;
-    padding: 20px 0;
-    z-index: 100;
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-}
-
-.sidebar.collapsed {
-    width: 70px;
-    min-width: 70px;
-}
-
-/* Toggle button */
-.sidebar-toggle {
-    position: absolute;
-    top: 20px;
-    right: -12px;
-    width: 24px;
-    height: 24px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--text-muted);
-    font-size: 12px;
-    transition: all 0.3s;
-    z-index: 101;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-
-.sidebar-toggle:hover {
-    background: var(--accent-green-soft);
-    color: var(--accent-green);
-    border-color: var(--accent-green);
-}
-
-.sidebar.collapsed .sidebar-toggle i {
-    transform: rotate(180deg);
-}
-
-/* Brand */
-.sidebar-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 0 20px;
-    margin-bottom: 30px;
-    transition: all 0.3s;
-}
-
-.sidebar.collapsed .sidebar-brand {
-    justify-content: center;
+    background: rgba(4, 1, 0, 0.78);
+    border-right: 1px solid rgba(52,211,153,0.12);
     padding: 0;
-}
-
-.brand-logo {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, var(--accent-green), #059669);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    color: white;
-    box-shadow: 0 0 15px var(--accent-green-glow);
+    transition: width 0.3s ease, min-width 0.3s ease;
+    position: relative;
     flex-shrink: 0;
 }
+.sidebar.collapsed { width: 64px; min-width: 64px; }
 
-.brand-text {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
-    white-space: nowrap;
-    transition: opacity 0.3s, width 0.3s;
-    overflow: hidden;
+.sidebar-toggle {
+    position: absolute; top: 18px; right: -13px;
+    width: 26px; height: 26px;
+    background: rgba(2, 26, 17, 0.9);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--green-primary); font-size: 12px;
+    z-index: 20;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    transition: all 0.2s;
 }
+.sidebar-toggle:hover { background: var(--green-soft); box-shadow: 0 0 10px var(--green-glow); }
+.sidebar.collapsed .sidebar-toggle i { transform: rotate(180deg); }
 
-.sidebar.collapsed .brand-text {
-    opacity: 0;
-    width: 0;
-    display: none;
+.brand {
+    display: flex; align-items: center; gap: 12px;
+    padding: 22px 20px 18px;
+    border-bottom: 1px solid var(--border-dim);
+    flex-shrink: 0;
 }
+.sidebar.collapsed .brand { justify-content: center; padding: 22px 0 18px; }
 
-/* Nav sections */
-.nav-section {
-    padding: 0 16px;
-    margin-bottom: 8px;
-    transition: all 0.3s;
+.brand-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--green-primary), var(--green-dark));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: #fff;
+    box-shadow: 0 0 18px var(--green-glow);
+    flex-shrink: 0;
 }
+.brand-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--text-1); letter-spacing: 0.05em; text-transform: uppercase;
+    white-space: nowrap; transition: opacity 0.2s;
+}
+.sidebar.collapsed .brand-label { opacity:0; width:0; overflow:hidden; display:none; }
 
-.nav-section-title {
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 0 12px;
-    margin-bottom: 8px;
-    transition: opacity 0.3s;
-    white-space: nowrap;
+.nav-group { padding: 14px 12px 0; }
+.nav-group-title {
+    font-size: 9px; font-weight: 700; color: var(--text-3);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    padding: 0 8px; margin-bottom: 6px;
 }
-
-.sidebar.collapsed .nav-section-title {
-    opacity: 0;
-    display: none;
-}
-
-.sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
-    padding: 0 12px;
-    transition: all 0.3s;
-}
-
-.sidebar.collapsed .sidebar-nav {
-    padding: 0;
-    align-items: center;
-}
+.sidebar.collapsed .nav-group-title { display: none; }
+nav { display: flex; flex-direction: column; gap: 2px; }
 
 .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
-    border-radius: 10px;
-    color: var(--text-secondary);
-    font-size: 14px;
-    text-decoration: none;
-    transition: all 0.25s ease;
-    position: relative;
-    white-space: nowrap;
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; border-radius: 8px;
+    color: var(--text-2); font-size: 13px; font-weight: 500;
+    text-decoration: none; transition: all 0.2s; white-space: nowrap; position: relative;
 }
+.sidebar.collapsed .nav-item { justify-content:center; padding:10px; width:40px; margin:0 auto; }
+.nav-item:hover { background: var(--bg-hover); color: var(--green-bright); }
 
-.sidebar.collapsed .nav-item {
-    width: 48px;
-    height: 48px;
-    padding: 0;
-    justify-content: center;
-    gap: 0;
-}
-
-.nav-item:hover {
-    background: rgba(255, 255, 255, 0.03);
-    color: var(--text-primary);
-}
-
-.nav-item.active {
-    background: var(--accent-green-soft);
-    color: var(--accent-green);
-    box-shadow: 0 0 12px var(--accent-green-glow);
-}
-
-.nav-item i {
-    font-size: 20px;
-    flex-shrink: 0;
-    width: 24px;
-    text-align: center;
-}
-
-.nav-item span {
-    font-size: 13px;
-    font-weight: 500;
-    transition: opacity 0.3s, width 0.3s;
-    overflow: hidden;
-}
-
-.sidebar.collapsed .nav-item span {
-    opacity: 0;
-    width: 0;
-    display: none;
-}
+.nav-item i { font-size: 18px; flex-shrink: 0; width: 22px; text-align: center; }
+.sidebar.collapsed .nav-item span { opacity:0; width:0; overflow:hidden; display:none; }
 
 .nav-badge {
-    position: absolute;
-    top: 6px;
-    right: 10px;
-    min-width: 18px;
-    height: 18px;
-    background: var(--accent-red);
-    color: white;
-    border-radius: 50%;
-    font-size: 10px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 8px var(--accent-red-glow);
-    padding: 0 5px;
+    margin-left: auto;
+    background: var(--red); color: #fff; font-size: 10px; font-weight: 700;
+    border-radius: 10px; padding: 1px 6px;
+   
 }
+.sidebar.collapsed .nav-badge { position:absolute; top:2px; right:2px; margin:0; }
 
-.sidebar.collapsed .nav-badge {
-    top: -2px;
-    right: -2px;
+.sidebar.collapsed .nav-item[title]::after {
+    content: attr(title); position: absolute; left: 52px;
+    background: rgba(4,18,12,0.95); color: var(--text-1);
+    padding: 5px 10px; border-radius: 6px; font-size: 11px;
+    white-space: nowrap; opacity: 0; pointer-events: none;
+    transition: opacity 0.15s; border: 1px solid var(--border); z-index: 100;
 }
+.sidebar.collapsed .nav-item:hover::after { opacity: 1; }
 
-/* Tooltip on collapsed */
-.sidebar.collapsed .nav-item::after {
-    content: attr(title);
-    position: absolute;
-    left: 60px;
-    background: var(--bg-card);
-    color: var(--text-primary);
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-    border: 1px solid var(--border);
-    z-index: 200;
-}
-
-.sidebar.collapsed .nav-item:hover::after {
-    opacity: 1;
-}
-
-/* Footer */
 .sidebar-footer {
-    margin-top: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px 20px 0;
-    border-top: 1px solid var(--border);
-    transition: all 0.3s;
+    margin-top: auto; padding: 14px 16px;
+    border-top: 1px solid var(--border-dim);
 }
+.sidebar.collapsed .sidebar-footer { padding: 14px 6px; display:flex; justify-content:center; }
 
-.sidebar.collapsed .sidebar-footer {
-    padding: 16px 0 0;
-    align-items: center;
+.user-row { display:flex; align-items:center; gap:9px; margin-bottom: 10px; }
+.sidebar.collapsed .user-row { display: none; }
+.avatar {
+    width:32px; height:32px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    border-radius: 8px; display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700; color:#fff; flex-shrink:0;
 }
+.user-info { display:flex; flex-direction:column; overflow:hidden; }
+.user-name { font-size:12px; font-weight:600; color:var(--text-1); white-space:nowrap; }
+.user-role { font-size:10px; color:var(--text-3); }
 
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.3s;
+.btn-logout {
+    display:flex; align-items:center; gap:8px;
+    padding:8px 10px; border-radius:8px; border:none;
+    background:#10b981; color:white;
+    cursor:pointer; font-size:12px; font-weight:500;
+    text-decoration:none; width:100%; transition:all 0.2s;
 }
+.btn-logout:hover { background:#10b981; color:var(--red); }
+.btn-logout i { font-size:16px; flex-shrink:0; }
+.sidebar.collapsed .btn-logout { width:40px; padding:10px; justify-content:center; }
+.sidebar.collapsed .btn-logout span { display:none; }
 
-.sidebar.collapsed .user-info {
-    display: none;
-}
-
-.user-avatar {
-    width: 36px;
-    height: 36px;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 700;
-    color: white;
-    flex-shrink: 0;
-}
-
-.user-details {
+/* ── MAIN COLUMN ── */
+.main {
+    flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    min-width: 0;
 }
 
-.user-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-primary);
-    white-space: nowrap;
-}
-
-.user-role {
-    font-size: 11px;
-    color: var(--text-muted);
-}
-
-.btn-logout-sidebar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: none;
-    background: rgba(255, 255, 255, 0.03);
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 13px;
-    font-weight: 500;
-    text-decoration: none;
-}
-
-.btn-logout-sidebar:hover {
-    background: var(--accent-red-soft);
-    color: var(--accent-red);
-}
-
-.btn-logout-sidebar i {
-    font-size: 18px;
+/* ── TOP BAR ── */
+.topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border-dim);
+    background: rgba(87, 109, 100, 0.22);
+    backdrop-filter: blur(10px);
     flex-shrink: 0;
 }
-
-.sidebar.collapsed .btn-logout-sidebar {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    justify-content: center;
-    gap: 0;
+.title-badge {
+    display:inline-flex; align-items:center; gap:7px;
+    background: rgba(1, 16, 11, 0.97);
+    border: 1px solid var(--green-bright);
+    border-radius: 20px; padding: 10px 16px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--green-bright); letter-spacing: 0.08em; text-transform: uppercase;
 }
-
-.sidebar.collapsed .btn-logout-sidebar span {
-    display: none;
+.title-badge i { font-size:17px; }
+.topbar-right { display:flex; align-items:center; gap:9px; }
+.tb-btn {
+    width:34px; height:34px; border-radius:9px; border:1px solid var(--border-dim);
+    background:var(--bg-inner); color:var(--text-2);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:16px; transition:all 0.2s;
 }
+.tb-btn:hover { background:var(--bg-hover); color:var(--green-bright); border-color:var(--border); }
+.tb-date {
+    display:flex; align-items:center; gap:7px;
+    padding:6px 12px; border:1px solid var(--border-dim);
+    border-radius:9px; background:var(--bg-inner);
+    font-size:11px; color:var(--text-2);
+}
+.tb-date i { color:var(--green-primary); font-size:14px; }
 
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  CONTENT — Scroll interne si nécessaire mais compact                       */
-/* ═══════════════════════════════════════════════════════════════════════════ */
-
-.content {
+/* ── CONTENT AREA ── */
+.dash-body {
     flex: 1;
-    padding: 20px 28px;
+    padding: 20px 20px;
     overflow-y: auto;
-    overflow-x: hidden;
-    transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Header ultra compact */
-.content-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-    flex-shrink: 0;
-}
-
-.header-title-group h1 {
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--text-primary);
-    margin-bottom: 2px;
-    letter-spacing: -0.02em;
-}
-
-.header-title-group p {
-    font-size: 12px;
-    color: var(--text-muted);
-}
-
-.header-actions {
-    display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 12px;
 }
+.dash-body::-webkit-scrollbar { width: 8px; }
+.dash-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
 
-.search-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 14px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    width: 220px;
-    transition: all 0.3s;
-}
-
-.search-box:focus-within {
-    border-color: var(--accent-green);
-    box-shadow: 0 0 15px var(--accent-green-glow);
-}
-
-.search-box i {
-    color: var(--text-muted);
-    font-size: 16px;
-}
-
-.search-box input {
-    background: none;
-    border: none;
-    color: var(--text-primary);
-    font-size: 13px;
-    outline: none;
-    width: 100%;
-}
-
-.search-box input::placeholder {
-    color: var(--text-dim);
-}
-
-.header-date {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 14px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-.header-date i {
-    color: var(--accent-cyan);
-    font-size: 16px;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  KPI ROW — Ultra compact, 6 sur une ligne ou 2×3 très serré                */
-/* ═══════════════════════════════════════════════════════════════════════════ */
-
-.kpi-row {
+/* ── KPI STRIP ── */
+.kpi-strip {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 9px;
     flex-shrink: 0;
+    animation: fadeUp 0.5s ease both;
 }
 
-.kpi-box {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 16px;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    min-height: 0;
-}
-
-.kpi-box:hover {
-    transform: translateY(-2px);
-    border-color: var(--border-hover);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-}
-
-.kpi-glow {
-    position: absolute;
-    top: -40%;
-    right: -30%;
-    width: 80%;
-    height: 80%;
-    border-radius: 50%;
-    opacity: 0.06;
-    filter: blur(30px);
-    transition: all 0.3s;
-}
-
-.kpi-box:hover .kpi-glow {
-    opacity: 0.12;
-}
-
-.kpi-total .kpi-glow { background: var(--accent-blue); }
-.kpi-energy .kpi-glow { background: var(--accent-green); }
-.kpi-co2 .kpi-glow { background: var(--accent-orange); }
-.kpi-fab .kpi-glow { background: var(--accent-purple); }
-.kpi-score .kpi-glow { background: var(--accent-cyan); }
-.kpi-alert .kpi-glow { background: var(--accent-red); }
-
-.kpi-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    position: relative;
-    z-index: 1;
-}
-
-.kpi-title {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.kpi-icon-box {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-}
-
-.kpi-total .kpi-icon-box { background: var(--accent-blue-soft); color: var(--accent-blue); }
-.kpi-energy .kpi-icon-box { background: var(--accent-green-soft); color: var(--accent-green); }
-.kpi-co2 .kpi-icon-box { background: var(--accent-orange-soft); color: var(--accent-orange); }
-.kpi-fab .kpi-icon-box { background: var(--accent-purple-soft); color: var(--accent-purple); }
-.kpi-score .kpi-icon-box { background: var(--accent-cyan-soft); color: var(--accent-cyan); }
-.kpi-alert .kpi-icon-box { background: var(--accent-red-soft); color: var(--accent-red); }
-
-.kpi-number {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--text-primary);
-    position: relative;
-    z-index: 1;
-    letter-spacing: -0.02em;
-    line-height: 1;
-}
-
-.kpi-number small {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-muted);
-    margin-left: 2px;
-}
-
-.kpi-trend {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 8px;
-    font-size: 11px;
-    color: var(--text-muted);
-    position: relative;
-    z-index: 1;
-}
-
-.kpi-trend i {
-    font-size: 12px;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  MAIN GRID — 2 colonnes : Top Consommation + Scores Faibles               */
-/* ═══════════════════════════════════════════════════════════════════════════ */
-
-.main-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-    flex-shrink: 0;
-}
-
-.chart-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: all 0.3s;
-    display: flex;
-    flex-direction: column;
-}
-
-.chart-card:hover {
-    border-color: var(--border-hover);
-}
-
-.chart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-}
-
-.chart-header h3 {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.chart-header h3 i {
-    color: var(--accent-green);
-    font-size: 16px;
-}
-
-.chart-menu {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    border: none;
-    background: rgba(255, 255, 255, 0.03);
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 16px;
-}
-
-.chart-menu:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--text-primary);
-}
-
-.chart-body {
-    padding: 16px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 0;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  DIAGRAMME EN BÂTON (Bar Chart Vertical) — Consommation & Scores          */
-/* ═══════════════════════════════════════════════════════════════════════════ */
-
-.baton-chart {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 16px;
-    height: 160px;
-    padding: 0 8px;
-    position: relative;
-}
-
-.baton-chart::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 8px;
-    right: 8px;
-    height: 1px;
-    background: var(--border);
-}
-
-.baton-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    flex: 1;
-    max-width: 60px;
-}
-
-.baton-bar-container {
-    width: 100%;
-    height: 120px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    position: relative;
-}
-
-.baton-bar {
-    width: 100%;
-    max-width: 36px;
-    border-radius: 6px 6px 0 0;
-    transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    min-height: 4px;
-}
-
-.baton-bar::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 20px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent);
-    border-radius: 6px 6px 0 0;
-}
-
-.baton-value {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-primary);
-    white-space: nowrap;
-}
-
-.baton-label {
-    font-size: 10px;
-    color: var(--text-muted);
-    text-align: center;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  CONSO MENSUELLE DH — Bar Chart Horizontal                                */
-/* ═══════════════════════════════════════════════════════════════════════════ */
-
-.monthly-conso-chart {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 0 8px;
-}
-
-.month-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.month-label {
-    width: 40px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-align: right;
-    flex-shrink: 0;
-}
-
-.month-bar-wrapper {
-    flex: 1;
-    height: 28px;
-    background: rgba(255,255,255,0.02);
-    border-radius: 6px;
-    overflow: hidden;
-    position: relative;
-}
-
-.month-bar {
-    height: 100%;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 10px;
-    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    width: 0%;
-}
-
-.month-bar::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 30px;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1));
-}
-
-.month-bar-value {
-    font-size: 11px;
-    font-weight: 700;
-    color: white;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-    white-space: nowrap;
-}
-
-.month-total {
-    width: 70px;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-primary);
-    text-align: right;
-    flex-shrink: 0;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  BOTTOM ROW — Donut + Alertes + Conso Mensuelle                            */
-/* ═══════════════════════════════════════════════════════════════════════════ */
-
-.bottom-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-    flex-shrink: 0;
-}
-
-.conso-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    flex-shrink: 0;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  DONUT CHART — Compact                                                     */
-/* ═══════════════════════════════════════════════════════════════════════════ */
-
-.donut-container {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.donut-chart {
-    position: relative;
-    width: 140px;
-    height: 140px;
-    flex-shrink: 0;
-}
-
-.donut {
-    width: 100%;
-    height: 100%;
-    transform: rotate(-90deg);
-}
-
-.donut-segment {
-    transition: all 0.3s;
-    cursor: pointer;
-}
-
-.donut-segment:hover {
-    stroke-width: 4;
-    filter: drop-shadow(0 0 6px currentColor);
-}
-
-.donut-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-}
-
-.donut-value {
-    display: block;
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
-}
-
-.donut-label {
-    font-size: 10px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-}
-
-.donut-legend {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex: 1;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 8px;
-    border-radius: 6px;
-    transition: all 0.2s;
-    cursor: pointer;
-}
-
-.legend-item:hover {
-    background: rgba(255, 255, 255, 0.03);
-}
-
-.legend-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 3px;
-    flex-shrink: 0;
-    box-shadow: 0 0 6px currentColor;
-}
-
-.legend-name {
-    font-size: 12px;
-    color: var(--text-secondary);
-    flex: 1;
-}
-
-.legend-value {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-/* Alert Cards */
-.alert-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.alert-card-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    text-decoration: none;
+.kpi {
+    background: rgba(255,255,255,0.055);
+    border: 1px solid rgba(52,211,153,0.14);
+    border-radius: var(--r);
+    padding: 11px 13px;
+    position: relative; overflow: hidden;
     transition: all 0.25s;
+    backdrop-filter: blur(8px);
 }
-
-.alert-card-item:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: var(--accent-orange);
-    transform: translateX(4px);
+.kpi:hover { border-color:var(--border); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+.kpi::after {
+    content:''; position:absolute; top:-50%; right:-30%;
+    width:70%; height:70%; border-radius:50%;
+    filter:blur(26px); opacity:0.09; pointer-events:none;
 }
+.kpi-eqp::after { background:var(--blue); }
+.kpi-kwh::after { background:var(--green-primary); }
+.kpi-co2::after { background:var(--amber); }
+.kpi-fab::after { background:var(--purple); }
+.kpi-sc::after  { background:var(--cyan); }
+.kpi-alr::after { background:var(--red); }
 
-.alert-card-icon {
-    width: 32px;
-    height: 32px;
-    background: var(--accent-red-soft);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.kpi-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; }
+.kpi-label { font-size:10px; font-weight:1000; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-3); }
+.kpi-ico { width:30px; height:30px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:25px; }
+.kpi-eqp .kpi-ico { background:rgba(59,130,246,0.13); color:var(--blue); }
+.kpi-kwh .kpi-ico { background:var(--green-soft); color:var( --green-softt); }
+.kpi-co2 .kpi-ico { background:rgba(245,158,11,0.11); color:var(--amber); }
+.kpi-fab .kpi-ico { background:rgba(139,92,246,0.11); color:var(--purple); }
+.kpi-sc  .kpi-ico { background:rgba(6,182,212,0.11); color:var(--cyan); }
+.kpi-alr .kpi-ico { background:rgba(239,68,68,0.11); color:var(--red); }
+.kpi-val { font-family:'Rajdhani',sans-serif; font-size:24px; font-weight:700; color:var(--text-1); line-height:1; letter-spacing:-0.01em; }
+.kpi-unit { font-size:12px; font-weight:500; color:var(--text-1); margin-left:2px; }
+.kpi-foot { display:flex; align-items:center; gap:3px; margin-top:5px; font-size:12px; color:var(--text-3);font-weight:600; }
+.kpi-foot i { font-size:20px; }
+
+/* ── MAIN GRID: 3 columns ── */
+.grid-main {
+    display: grid;
+    grid-template-columns: 1fr 185px 1fr;
+    gap: 12px;
     flex-shrink: 0;
+    animation: fadeUp 0.5s 0.08s ease both;
 }
 
-.alert-card-icon i {
-    font-size: 16px;
-    color: var(--accent-red);
+/* ── CARD ── */
+.card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(52,211,153,0.13);
+    border-radius: var(--r);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex; flex-direction: column; overflow: hidden;
+    transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--border); }
+.card-head {
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 9px 13px; border-bottom:1px solid var(--border-dim); flex-shrink:0;
+}
+.card-title {
+    display:flex; align-items:center; gap:6px;
+    font-family:'Rajdhani',sans-serif; font-size:11px; font-weight:700;
+    color:var(--green-bright); text-transform:uppercase; letter-spacing:0.07em;
+}
+.card-title i { font-size:14px; }
+.card-body { flex:1; padding:11px 13px; display:flex; flex-direction:column; min-height:0; }
+
+/* ── CENTER GAUGE ── */
+.center-col {
+    display: flex; flex-direction: column; gap: 10px;
+}
+.gauge-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(52,211,153,0.13);
+    border-radius: var(--r);
+    backdrop-filter: blur(10px);
+    padding: 12px 10px;
+    display: flex; flex-direction: column; align-items: center;
+}
+.gauge-card:hover { border-color: var(--border); }
+.gauge-title {
+    font-family:'Rajdhani',sans-serif; font-size:10px; font-weight:700;
+    color:var(--green-bright); text-transform:uppercase; letter-spacing:0.10em;
+    margin-bottom:8px; display:flex; align-items:center; gap:5px;
+}
+.gauge-wrap { position:relative; width:150px; height:90px; }
+.gauge-svg { overflow:visible; }
+.gauge-bg-arc { fill:none; stroke:rgba(16,185,129,0.10); stroke-width:9; stroke-linecap:round; }
+.gauge-arc    { fill:none; stroke:url(#gaugeGrad); stroke-width:9; stroke-linecap:round; transition:stroke-dasharray 1.4s cubic-bezier(.4,0,.2,1); }
+.gauge-needle { transform-origin:75px 75px; transition:transform 1.4s cubic-bezier(.4,0,.2,1); }
+.gauge-value {
+    position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+    font-family:'Rajdhani',sans-serif; font-size:28px; font-weight:700;
+    color:var(--green-bright); text-shadow:0 0 18px var(--green-glow); line-height:1;
+}
+.gauge-pct { font-size:12px; font-weight:500; color:var(--text-2); margin-left:1px; }
+.gauge-range { display:flex; justify-content:space-between; width:150px; font-size:8px; color:var(--text-3); margin-top:3px; }
+
+.score-mini-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; width:100%; }
+.score-mini {
+    background:rgba(255,255,255,0.03); border:1px solid var(--border-dim);
+    border-radius:8px; padding:7px 9px; text-align:center;
+}
+.score-mini-val { font-family:'Rajdhani',sans-serif; font-size:17px; font-weight:700; color:var(--text-1); line-height:1; }
+.score-mini-label { font-size:8px; color:var(--text-3); text-transform:uppercase; letter-spacing:0.06em; margin-top:2px; }
+
+/* ── CO2 BARS ── */
+.co2-chart {
+    display:flex; align-items:flex-end; gap:5px;
+    flex:1; padding-bottom:16px; position:relative;
+}
+.co2-chart::after { content:''; position:absolute; bottom:16px; left:0; right:0; height:1px; background:var(--border-dim); }
+.co2-bar-group { display:flex; flex-direction:column; align-items:center; gap:3px; flex:1; }
+.co2-bar-wrap { width:100%; display:flex; align-items:flex-end; justify-content:center; flex:1; }
+.co2-bar {
+    width:70%; max-width:18px; border-radius:3px 3px 0 0;
+    background:linear-gradient(180deg, var(--green-bright), var(--green-dark));
+    transition:height 1.2s cubic-bezier(.4,0,.2,1); min-height:3px; position:relative;
+}
+.co2-bar::after { content:''; position:absolute; top:0; left:0; right:0; height:6px; background:linear-gradient(180deg,rgba(255,255,255,0.18),transparent); border-radius:3px 3px 0 0; }
+.co2-bar-label { font-size:7px; color:var(--text-3); text-align:center; white-space:nowrap; }
+
+/* ── DONUT ── */
+.donut-wrap { display:flex; align-items:center; gap:14px; flex:1; }
+.donut-svg-wrap { position:relative; flex-shrink:0; }
+.donut-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; }
+.donut-center-val { font-family:'Rajdhani',sans-serif; font-size:20px; font-weight:700; color:var(--text-1); line-height:1; }
+.donut-center-sub { font-size:7px; color:var(--text-3); text-transform:uppercase; }
+.donut-legend { display:flex; flex-direction:column; gap:6px; flex:1; }
+.dl-item { display:flex; align-items:center; gap:7px; }
+.dl-dot { width:8px; height:8px; border-radius:3px; flex-shrink:0; }
+.dl-info { display:flex; flex-direction:column; flex:1; }
+.dl-name { font-size:9px; color:var(--text-2); }
+.dl-pct  { font-size:11px; font-weight:700; color:var(--text-1); font-family:'Rajdhani',sans-serif; }
+
+/* ── BOTTOM GRID ── */
+.grid-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    flex-shrink: 0;
+    animation: fadeUp 0.5s 0.16s ease both;
 }
 
-.alert-card-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+/* ── LINE CHART CURVE ── */
+.line-chart-container {
+    position: relative;
+    width: 100%;
     flex: 1;
-    overflow: hidden;
+    min-height: 140px;
 }
-
-.alert-card-name {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-primary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.line-chart-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
 }
-
-.alert-card-reason {
+.line-grid { stroke: rgba(255,255,255,0.05); stroke-width: 1; }
+.line-axis-label { font-size: 8px; fill: var(--text-3); font-family: 'Exo 2', sans-serif; }
+.line-area { fill: url(#lineAreaGrad); opacity: 0.5; }
+.line-path {
+    fill: none;
+    stroke: url(#lineGrad);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 6px rgba(16,185,129,0.6));
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    transition: stroke-dashoffset 2s cubic-bezier(.4,0,.2,1);
+}
+.line-dot {
+    fill: var(--green-bright);
+    filter: drop-shadow(0 0 4px rgba(52,211,153,0.8));
+    opacity: 0;
+    transition: opacity 0.3s;
+    cursor: pointer;
+}
+.line-dot:hover { r: 5; }
+.line-tooltip {
+    position: absolute;
+    background: rgba(4,18,12,0.92);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 5px 9px;
     font-size: 10px;
-    color: var(--accent-orange);
+    color: var(--text-1);
+    pointer-events: none;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 10;
 }
+/* ── SERVER TABLE ── */
+.srv-table { width:100%; border-collapse:collapse; }
+.srv-table th { font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-3); padding:4px 7px; border-bottom:1px solid var(--border-dim); text-align:left; background:rgba(16,185,129,0.04); }
+.srv-table td { padding:5px 7px; font-size:10px; color:var(--text-2); border-bottom:1px solid rgba(255,255,255,0.03); }
+.srv-table tr:last-child td { border-bottom:none; }
+.srv-table tr:hover td { background:var(--bg-hover); color:var(--text-1); }
+.srv-name { font-weight:600; color:var(--text-1) !important; }
+.score-pill { display:inline-flex; align-items:center; justify-content:center; min-width:26px; padding:1px 5px; border-radius:4px; font-size:9px; font-weight:700; font-family:'Rajdhani',sans-serif; }
+.score-hi  { background:rgba(16,185,129,0.14); color:var(--green-bright); }
+.score-mid { background:rgba(245,158,11,0.14); color:var(--amber); }
+.score-lo  { background:rgba(239,68,68,0.14);  color:var(--red); }
 
-.alert-card-item > i {
-    color: var(--text-muted);
-    font-size: 14px;
-    transition: all 0.2s;
-    flex-shrink: 0;
-}
+/* ── ALERT LIST ── */
+.alert-list { display:flex; flex-direction:column; gap:5px; }
+.alert-item { display:flex; align-items:center; gap:8px; padding:7px 9px; background:rgba(239,68,68,0.05); border:1px solid rgba(239,68,68,0.12); border-radius:9px; text-decoration:none; transition:all 0.2s; }
+.alert-item:hover { background:rgba(239,68,68,0.09); border-color:rgba(239,68,68,0.22); transform:translateX(3px); }
+.alert-icon { width:28px; height:28px; border-radius:7px; background:rgba(239,68,68,0.12); display:flex; align-items:center; justify-content:center; color:var(--red); font-size:14px; flex-shrink:0; }
+.alert-info { flex:1; overflow:hidden; }
+.alert-name { font-size:11px; font-weight:600; color:var(--text-1); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.alert-reason { font-size:9px; color:var(--amber); }
+.alert-arrow { color:var(--text-3); font-size:12px; transition:all 0.2s; }
+.alert-item:hover .alert-arrow { color:var(--red); transform:translateX(2px); }
+.empty-ok { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:16px; color:var(--green-bright); font-size:11px; }
+.empty-ok i { font-size:26px; }
 
-.alert-card-item:hover > i {
-    color: var(--accent-orange);
-    transform: translateX(3px);
-}
-
-/* Empty State */
-.empty-state-dark {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 30px 16px;
-    color: var(--accent-green);
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.empty-state-dark i {
-    font-size: 32px;
-    opacity: 0.8;
-}
-
-/* Chart Link */
-.chart-link {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--accent-orange);
-    text-decoration: none;
-    transition: all 0.2s;
-}
-
-.chart-link:hover {
-    color: #fbbf24;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  RESPONSIVE                                                                */
-/* ═══════════════════════════════════════════════════════════════════════════ */
-
-@media (max-width: 1200px) {
-    .kpi-row {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    .main-grid {
-        grid-template-columns: 1fr;
-    }
-    .bottom-row {
-        grid-template-columns: 1fr;
-    }
-    body {
-        overflow-y: auto;
-    }
-    .content {
-        overflow-y: visible;
-    }
-}
-
-@media (max-width: 768px) {
-    .kpi-row {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        transform: translateX(-100%);
-        transition: transform 0.3s;
-    }
-    .sidebar.active {
-        transform: translateX(0);
-    }
-    .content {
-        margin-left: 0;
-        padding: 70px 16px 16px;
-    }
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+    from { opacity:0; transform:translateY(10px); }
+    to   { opacity:1; transform:translateY(0); }
 }
 </style>
 </head>
 <body>
 
-<div class="app">
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  FLOATING CENTERED SHELL                              -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="shell">
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SIDEBAR — Rétractable avec toggle              -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
-        <!-- Toggle Button -->
-        <div class="sidebar-toggle" id="sidebarToggle" title="Réduire/Agrandir">
+        <div class="sidebar-toggle" id="sidebarToggle" title="Réduire / Agrandir">
             <i class="ph ph-caret-left"></i>
         </div>
 
-        <div class="sidebar-brand">
-            <div class="brand-logo">
-                <i class="ph ph-leaf"></i>
-            </div>
-            <span class="brand-text">GreenIT</span>
+        <div class="brand">
+            <div class="brand-icon"><i class="ph ph-leaf"></i></div>
+            <span class="brand-label">Green IT</span>
         </div>
 
-        <!-- Navigation Principale -->
-        <div class="nav-section">
-            <div class="nav-section-title">Principal</div>
-            <nav class="sidebar-nav">
+        <div class="nav-group">
+            <div class="nav-group-title">Principal</div>
+            <nav>
                 <a href="{{ route('dashboard') }}" class="nav-item active" title="Dashboard">
-                    <i class="ph ph-squares-four"></i>
-                    <span>Dashboard</span>
+                    <i class="ph ph-squares-four"></i><span>Dashboard</span>
                 </a>
                 <a href="{{ route('devices.index') }}" class="nav-item" title="Parc informatique">
-                    <i class="ph ph-desktop"></i>
-                    <span>Parc informatique</span>
+                    <i class="ph ph-desktop"></i><span>Parc informatique</span>
                 </a>
                 <a href="{{ route('energy.index') }}" class="nav-item" title="Consommation">
-                    <i class="ph ph-lightning"></i>
-                    <span>Consommation</span>
+                    <i class="ph ph-lightning"></i><span>Consommation</span>
                 </a>
                 <a href="{{ route('devices.remplacer') }}" class="nav-item" title="Alertes">
-                    <i class="ph ph-warning"></i>
-                    <span>Alertes</span>
+                    <i class="ph ph-warning"></i><span>Alertes</span>
                     @if($kpis['a_remplacer'] > 0)
                         <span class="nav-badge">{{ $kpis['a_remplacer'] }}</span>
                     @endif
@@ -1160,383 +550,382 @@ html, body {
         </div>
 
         <div class="sidebar-footer">
-            <div class="user-info">
-                <div class="user-avatar" title="{{ Auth::user()->name }}">
-                    {{ substr(Auth::user()->name, 0, 1) }}
-                </div>
-                <div class="user-details">
+            <div class="user-row">
+                <div class="avatar">{{ substr(Auth::user()->name, 0, 1) }}</div>
+                <div class="user-info">
                     <span class="user-name">{{ Auth::user()->name }}</span>
                     <span class="user-role">Administrateur</span>
                 </div>
             </div>
             <form action="{{ route('logout') }}" method="POST" style="margin:0">
                 @csrf
-                <button type="submit" class="btn-logout-sidebar" title="Déconnexion">
-                    <i class="ph ph-sign-out"></i>
-                    <span>Déconnexion</span>
+                <button type="submit" class="btn-logout" title="Déconnexion">
+                    <i class="ph ph-sign-out"></i><span>Déconnexion</span>
                 </button>
             </form>
         </div>
     </aside>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- CONTENU DROIT                                -->
-    <!-- ═══════════════════════════════════════════════ -->
-    <main class="content" id="content">
+    <!-- MAIN -->
+    <div class="main">
 
-        <!-- Header -->
-        <header class="content-header">
-            <div class="header-title-group">
-                <h1>Tableau de bord</h1>
-                <p>Bienvenue, voici l'état de votre parc informatique</p>
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="title-badge">
+                <i class="ph ph-leaf"></i>
+                Projet Green IT — Tableau de Bord
             </div>
-            <div class="header-actions">
-                <div class="search-box">
-                    <i class="ph ph-magnifying-glass"></i>
-                    <input type="text" placeholder="Rechercher...">
-                </div>
-                <div class="header-date">
+            <div class="topbar-right">
+                <button class="tb-btn" title="Paramètres"><i class="ph ph-sliders"></i></button>
+                <button class="tb-btn" title="Profil"><i class="ph ph-user-circle"></i></button>
+                <div class="tb-date">
                     <i class="ph ph-calendar-blank"></i>
                     <span>{{ now()->format('d M Y') }}</span>
                 </div>
             </div>
-        </header>
-
-        <!-- KPI Cards — 6 sur une ligne, ultra compact -->
-        <div class="kpi-row">
-            <div class="kpi-box kpi-total">
-                <div class="kpi-glow"></div>
-                <div class="kpi-top">
-                    <span class="kpi-title">Équipements</span>
-                    <div class="kpi-icon-box"><i class="ph ph-desktop"></i></div>
-                </div>
-                <div class="kpi-number">{{ $kpis['total_devices'] }}</div>
-                <div class="kpi-trend"><i class="ph ph-trend-up"></i><span>Total actif</span></div>
-            </div>
-
-            <div class="kpi-box kpi-energy">
-                <div class="kpi-glow"></div>
-                <div class="kpi-top">
-                    <span class="kpi-title">Consommation</span>
-                    <div class="kpi-icon-box"><i class="ph ph-lightning"></i></div>
-                </div>
-                <div class="kpi-number">{{ number_format($kpis['total_conso'], 0, ',', ' ') }} <small>kWh</small></div>
-                <div class="kpi-trend"><i class="ph ph-trend-up"></i><span>Annuel</span></div>
-            </div>
-
-            <div class="kpi-box kpi-co2">
-                <div class="kpi-glow"></div>
-                <div class="kpi-top">
-                    <span class="kpi-title">Émissions CO₂</span>
-                    <div class="kpi-icon-box"><i class="ph ph-cloud"></i></div>
-                </div>
-                <div class="kpi-number">{{ number_format($kpis['total_co2'], 0, ',', ' ') }} <small>kg</small></div>
-                <div class="kpi-trend"><i class="ph ph-trend-down"></i><span>Usage</span></div>
-            </div>
-
-            <div class="kpi-box kpi-fab">
-                <div class="kpi-glow"></div>
-                <div class="kpi-top">
-                    <span class="kpi-title">Fabrication</span>
-                    <div class="kpi-icon-box"><i class="ph ph-factory"></i></div>
-                </div>
-                <div class="kpi-number">{{ number_format($kpis['total_fab_co2'], 0, ',', ' ') }} <small>kg</small></div>
-                <div class="kpi-trend"><i class="ph ph-trend-down"></i><span>Embodied</span></div>
-            </div>
-
-            <div class="kpi-box kpi-score">
-                <div class="kpi-glow"></div>
-                <div class="kpi-top">
-                    <span class="kpi-title">Score Green</span>
-                    <div class="kpi-icon-box"><i class="ph ph-chart-bar"></i></div>
-                </div>
-                <div class="kpi-number">{{ $kpis['score_moyen'] }}<small>/100</small></div>
-                <div class="kpi-trend"><i class="ph ph-trend-up"></i><span>Moyenne</span></div>
-            </div>
-
-            <div class="kpi-box kpi-alert">
-                <div class="kpi-glow"></div>
-                <div class="kpi-top">
-                    <span class="kpi-title">Alertes</span>
-                    <div class="kpi-icon-box"><i class="ph ph-warning"></i></div>
-                </div>
-                <div class="kpi-number">{{ $kpis['a_remplacer'] }}</div>
-                <div class="kpi-trend"><i class="ph ph-warning-circle"></i><span>À remplacer</span></div>
-            </div>
         </div>
 
-        <!-- Main Grid — 2 colonnes : Top Consommation + Scores Faibles -->
-        <div class="main-grid">
-            <!-- Diagramme en Bâton — Top Consommation -->
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3><i class="ph ph-lightning"></i> Top consommation</h3>
-                </div>
-                <div class="chart-body">
-                    <div class="baton-chart" id="consoChart">
-                        @php
-                            $maxConso = $topConso->max('conso_annuelle_kwh') ?: 1;
-                            $consoColors = ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899'];
-                        @endphp
-                        @foreach($topConso as $index => $device)
-                            @php
-                                $height = ($device->conso_annuelle_kwh / $maxConso) * 100;
-                                $color = $consoColors[$index % count($consoColors)];
-                            @endphp
-                            <div class="baton-item">
-                                <div class="baton-bar-container">
-                                    <div class="baton-bar" style="height: 0%; background: {{ $color }};" data-height="{{ $height }}%"></div>
-                                </div>
-                                <span class="baton-value">{{ number_format($device->conso_annuelle_kwh, 0, ',', ' ') }}</span>
-                                <span class="baton-label" title="{{ $device->nom }}">{{ $device->nom }}</span>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
+        <!-- CONTENT -->
+        <div class="dash-body">
 
-            <!-- Diagramme en Bâton — Scores Faibles -->
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3><i class="ph ph-trend-down"></i> Scores faibles</h3>
+            <!-- KPI STRIP -->
+            <div class="kpi-strip">
+                <div class="kpi kpi-eqp">
+                    <div class="kpi-head"><span class="kpi-label">Équipements</span><div class="kpi-ico"><i class="ph ph-desktop"></i></div></div>
+                    <div class="kpi-val">{{ $kpis['total_devices'] }}</div>
+                    <div class="kpi-foot"><i class="ph ph-trend-up"></i> Total actif</div>
                 </div>
-                <div class="chart-body">
-                    <div class="baton-chart" id="scoresChart">
-                        @foreach($worstScore as $device)
-                            @php
-                                $score = $device->score_green_it ?? 0;
-                                $height = $score;
-                                if ($score >= 70) {
-                                    $color = '#10b981';
-                                } elseif ($score >= 40) {
-                                    $color = '#f59e0b';
-                                } else {
-                                    $color = '#ef4444';
-                                }
-                            @endphp
-                            <div class="baton-item">
-                                <div class="baton-bar-container">
-                                    <div class="baton-bar" style="height: 0%; background: {{ $color }};" data-height="{{ $height }}%"></div>
-                                </div>
-                                <span class="baton-value">{{ $score }}</span>
-                                <span class="baton-label" title="{{ $device->nom }}">{{ $device->nom }}</span>
-                            </div>
-                        @endforeach
-                    </div>
+                <div class="kpi kpi-kwh">
+                    <div class="kpi-head"><span class="kpi-label">Consommation</span><div class="kpi-ico"><i class="ph ph-lightning"></i></div></div>
+                    <div class="kpi-val">{{ number_format($kpis['total_conso'],0,',',' ') }}<span class="kpi-unit">kWh</span></div>
+                    <div class="kpi-foot"><i class="ph ph-trend-up"></i> Annuel</div>
+                </div>
+                <div class="kpi kpi-co2">
+                    <div class="kpi-head"><span class="kpi-label">Émissions CO₂</span><div class="kpi-ico"><i class="ph ph-cloud"></i></div></div>
+                    <div class="kpi-val">{{ number_format($kpis['total_co2'],0,',',' ') }}<span class="kpi-unit">kg</span></div>
+                    <div class="kpi-foot"><i class="ph ph-trend-down"></i> Usage</div>
+                </div>
+                <div class="kpi kpi-fab">
+                    <div class="kpi-head"><span class="kpi-label">Fabrication</span><div class="kpi-ico"><i class="ph ph-factory"></i></div></div>
+                    <div class="kpi-val">{{ number_format($kpis['total_fab_co2'],0,',',' ') }}<span class="kpi-unit">kg</span></div>
+                    <div class="kpi-foot"><i class="ph ph-trend-down"></i> Embodied</div>
+                </div>
+                <div class="kpi kpi-sc">
+                    <div class="kpi-head"><span class="kpi-label">Score Green</span><div class="kpi-ico"><i class="ph ph-chart-bar"></i></div></div>
+                    <div class="kpi-val">{{ $kpis['score_moyen'] }}<span class="kpi-unit">/100</span></div>
+                    <div class="kpi-foot"><i class="ph ph-trend-up"></i> Moyenne</div>
+                </div>
+                <div class="kpi kpi-alr">
+                    <div class="kpi-head"><span class="kpi-label">Alertes</span><div class="kpi-ico"><i class="ph ph-warning"></i></div></div>
+                    <div class="kpi-val">{{ $kpis['a_remplacer'] }}</div>
+                    <div class="kpi-foot"><i class="ph ph-warning-circle"></i> À remplacer</div>
                 </div>
             </div>
-        </div>
 
-        <!-- Conso Mensuelle DH — Graphique horizontal -->
-        <div class="conso-row">
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3><i class="ph ph-currency-circle-dollar"></i> Estimation consommation mensuelle (DH) — Équipements actifs</h3>
-                </div>
-                <div class="chart-body">
-                    <div class="monthly-conso-chart" id="monthlyConsoChart">
+            <!-- MAIN GRID: CO2 | Gauge | Donut -->
+            <div class="grid-main">
+
+                <!-- CO2 par mois -->
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-title"><i class="ph ph-chart-bar"></i> Émissions CO₂ par mois (kg)</div>
+                    </div>
+                    <div class="card-body">
                         @php
-                            // Prix du kWh en DH (ex: 1.5 DH/kWh)
-                            $prixKwh = 1.5;
-
-                            // Consommation annuelle totale des équipements actifs
-                            $consoAnnuelle = $kpis['total_conso_actifs'] ?? ($kpis['total_conso'] * 0.8);
-                            $consoMensuelle = $consoAnnuelle / 12;
-
-                            // Données mensuelles avec variation saisonnière
-                            $mois = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
-                            $variations = [1.15, 1.10, 1.05, 0.95, 0.90, 0.85, 0.90, 0.95, 1.00, 1.05, 1.10, 1.20];
-
-                            $monthlyData = [];
-                            $maxMonthly = 0;
-                            foreach($mois as $index => $m) {
-                                $value = $consoMensuelle * $variations[$index];
-                                $cost = $value * $prixKwh;
-                                $monthlyData[] = [
-                                    'mois' => $m,
-                                    'kwh' => $value,
-                                    'cost' => $cost
-                                ];
-                                if($cost > $maxMonthly) $maxMonthly = $cost;
+                            $co2Mois = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+                            $co2Var  = [1.05,1.08,1.10,1.00,0.95,0.88,0.90,0.92,0.97,1.02,1.08,1.15];
+                            $co2Base = ($kpis['total_co2'] ?? 1500) / 12;
+                            $co2Data = []; $maxCo2 = 0;
+                            foreach($co2Mois as $i => $m){
+                                $v = round($co2Base * $co2Var[$i]);
+                                $co2Data[] = ['m'=>$m,'v'=>$v];
+                                if($v>$maxCo2) $maxCo2=$v;
                             }
-
-                            $monthColors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', 
-                                           '#eab308', '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#84cc16'];
                         @endphp
-
-                        @foreach($monthlyData as $index => $data)
-                            @php
-                                $width = $maxMonthly > 0 ? ($data['cost'] / $maxMonthly) * 100 : 0;
-                                $color = $monthColors[$index];
-                            @endphp
-                            <div class="month-row">
-                                <span class="month-label">{{ $data['mois'] }}</span>
-                                <div class="month-bar-wrapper">
-                                    <div class="month-bar" style="background: {{ $color }}; width: 0%;" data-width="{{ $width }}%">
-                                        <span class="month-bar-value">{{ number_format($data['cost'], 0, ',', ' ') }} DH</span>
-                                    </div>
+                        <div class="co2-chart">
+                            @foreach($co2Data as $d)
+                            <div class="co2-bar-group">
+                                <div class="co2-bar-wrap">
+                                    <div class="co2-bar" style="height:0%;" data-height="{{ $maxCo2>0?round(($d['v']/$maxCo2)*100):0 }}%"></div>
                                 </div>
-                                <span class="month-total">{{ number_format($data['kwh'], 0, ',', ' ') }} kWh</span>
+                                <span class="co2-bar-label">{{ $d['m'] }}</span>
                             </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Bottom Row — Donut (Répartition par type) + Alertes -->
-        <div class="bottom-row">
-            <!-- Donut Chart — Répartition par type -->
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3><i class="ph ph-chart-pie-slice"></i> Répartition par type</h3>
-                    <button class="chart-menu"><i class="ph ph-dots-three"></i></button>
-                </div>
-                <div class="chart-body">
-                    <div class="donut-container">
-                        <div class="donut-chart">
-                            <svg viewBox="0 0 36 36" class="donut">
-                                @php
-                                    $total = $parType->sum('count');
-                                    $offset = 0;
-                                    $colors = ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#eab308', '#64748b'];
-                                @endphp
-                                @foreach($parType as $index => $type)
-                                    @php
-                                        $pct = $total > 0 ? ($type->count / $total) * 100 : 0;
-                                        $dash = $pct * 0.942;
-                                        $color = $colors[$index % count($colors)];
-                                    @endphp
-                                    <circle cx="18" cy="18" r="15.915"
-                                        fill="none"
-                                        stroke="{{ $color }}"
-                                        stroke-width="3"
-                                        stroke-dasharray="{{ $dash }} 100"
-                                        stroke-dashoffset="{{ -$offset }}"
-                                        class="donut-segment"
-                                    />
-                                    @php $offset += $dash; @endphp
-                                @endforeach
-                                <circle cx="18" cy="18" r="13" fill="#0b0f19"/>
+                <!-- Gauge -->
+                <div class="center-col">
+                    <div class="gauge-card">
+                        <div class="gauge-title"><i class="ph ph-leaf"></i> Score Green IT (%)</div>
+                        <div class="gauge-wrap">
+                            <svg class="gauge-svg" viewBox="0 0 150 90" width="150" height="90">
+                                <defs>
+                                    <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#059669"/>
+                                        <stop offset="100%" stop-color="#34d399"/>
+                                    </linearGradient>
+                                </defs>
+                                <path class="gauge-bg-arc" d="M 15 75 A 57 57 0 0 1 135 75"/>
+                                <path class="gauge-arc" id="gaugeArc" d="M 15 75 A 57 57 0 0 1 135 75" stroke-dasharray="0 179"/>
+                                <g id="gaugeNeedle" style="transform:rotate(-90deg); transform-origin:75px 75px;">
+                                    <line x1="75" y1="75" x2="75" y2="26" stroke="var(--green-bright)" stroke-width="2" stroke-linecap="round"/>
+                                    <circle cx="75" cy="75" r="4" fill="var(--green-bright)"/>
+                                </g>
                             </svg>
-                            <div class="donut-center">
-                                <span class="donut-value">{{ $total }}</span>
-                                <span class="donut-label">Total</span>
-                            </div>
+                            <div class="gauge-value" id="gaugeVal">{{ $kpis['score_moyen'] }}<span class="gauge-pct">%</span></div>
                         </div>
-                        <div class="donut-legend">
-                            @foreach($parType as $index => $type)
-                                @php $color = $colors[$index % count($colors)]; @endphp
-                                <div class="legend-item">
-                                    <span class="legend-dot" style="background: {{ $color }}; color: {{ $color }}"></span>
-                                    <span class="legend-name">{{ $type->type }}</span>
-                                    <span class="legend-value">{{ $type->count }}</span>
-                                </div>
-                            @endforeach
+                        <div class="gauge-range"><span>0</span><span>100</span></div>
+                    </div>
+                    <div class="score-mini-grid">
+                        <div class="score-mini">
+                            <div class="score-mini-val">{{ $kpis['total_devices'] }}</div>
+                            <div class="score-mini-label">Équipements</div>
+                        </div>
+                        <div class="score-mini">
+                            <div class="score-mini-val">{{ $kpis['a_remplacer'] }}</div>
+                            <div class="score-mini-label">Alertes</div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Alertes -->
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3><i class="ph ph-warning"></i> Alertes</h3>
-                    @if($alertes->count() > 0)
-                        <a href="{{ route('devices.remplacer') }}" class="chart-link">Voir tout</a>
-                    @endif
-                </div>
-                <div class="chart-body">
-                    @if($alertes->count() > 0)
-                        <div class="alert-cards">
-                            @foreach($alertes as $device)
-                                @php
-                                    $raisons = [];
-                                    if ($device->statut === 'recycle') $raisons[] = 'À recycler';
-                                    $age = $device->date_achat ? now()->diffInYears($device->date_achat) : null;
-                                    if ($age !== null && $device->duree_vie_annees && $age >= $device->duree_vie_annees) {
-                                        $raisons[] = "Âge dépassé";
-                                    }
-                                @endphp
-                                <a href="{{ route('devices.edit', $device) }}" class="alert-card-item">
-                                    <div class="alert-card-icon"><i class="ph ph-warning"></i></div>
-                                    <div class="alert-card-info">
-                                        <span class="alert-card-name">{{ $device->nom }}</span>
-                                        <span class="alert-card-reason">{{ implode(' + ', $raisons) ?: 'À remplacer' }}</span>
+                <!-- Donut Sources -->
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-title"><i class="ph ph-chart-pie-slice"></i> Sources d'énergie</div>
+                    </div>
+                    <div class="card-body">
+                        @php
+                            $total2 = $parType->sum('count');
+                            $dColors = ['#10b981','#3b82f6','#f59e0b','#8b5cf6','#06b6d4','#ec4899'];
+                            $offset2 = 25;
+                        @endphp
+                        <div class="donut-wrap">
+                            <div class="donut-svg-wrap">
+                                <svg viewBox="0 0 36 36" width="100" height="100">
+                                    <circle cx="18" cy="18" r="15.915" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3.5"/>
+                                    @foreach($parType as $idx => $type)
+                                    @php
+                                        $pct3 = $total2>0?($type->count/$total2)*100:0;
+                                        $dash3 = $pct3*0.942;
+                                        $c3 = $dColors[$idx%count($dColors)];
+                                    @endphp
+                                    <circle cx="18" cy="18" r="15.915" fill="none" stroke="{{ $c3 }}" stroke-width="3.5"
+                                        stroke-dasharray="{{ $dash3 }} 100" stroke-dashoffset="{{ -$offset2 }}" stroke-linecap="round"/>
+                                    @php $offset2+=$dash3; @endphp
+                                    @endforeach
+                                    <circle cx="18" cy="18" r="12" fill="rgba(4,12,20,0.85)"/>
+                                </svg>
+                                <div class="donut-center">
+                                    <div class="donut-center-val">{{ $total2 }}</div>
+                                    <div class="donut-center-sub">Total</div>
+                                </div>
+                            </div>
+                            <div class="donut-legend">
+                                @foreach($parType as $idx => $type)
+                                @php $pct4 = $total2>0?round(($type->count/$total2)*100,1):0; $c4=$dColors[$idx%count($dColors)]; @endphp
+                                <div class="dl-item">
+                                    <div class="dl-dot" style="background:{{ $c4 }}; box-shadow:0 0 5px {{ $c4 }};"></div>
+                                    <div class="dl-info">
+                                        <span class="dl-name">{{ $type->type }}</span>
+                                        <span class="dl-pct">{{ $pct4 }}%</span>
                                     </div>
-                                    <i class="ph ph-caret-right"></i>
-                                </a>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /grid-main -->
+
+            <!-- BOTTOM GRID: Monthly | Table -->
+            <div class="grid-bottom">
+
+                @php
+    $linePoints = [];
+    $lineW = 520; $lineH = 130; $padL = 30; $padR = 10; $padT = 10; $padB = 22;
+    $chartW = $lineW - $padL - $padR;
+    $chartH = $lineH - $padT - $padB;
+    $minCost = collect($mData)->min('cost');
+    $maxCost = collect($mData)->max('cost');
+    $range = $maxCost - $minCost ?: 1;
+    foreach($mData as $i => $d) {
+        $x = $padL + ($i / 11) * $chartW;
+        $y = $padT + $chartH - (($d['cost'] - $minCost) / $range) * $chartH;
+        $linePoints[] = ['x'=>round($x,1), 'y'=>round($y,1), 'm'=>$d['m'], 'cost'=>$d['cost'], 'kwh'=>$d['kwh']];
+    }
+    $pathD = 'M '.$linePoints[0]['x'].','.$linePoints[0]['y'];
+    for($i=1; $i<count($linePoints); $i++) {
+        $cpx1 = ($linePoints[$i-1]['x'] + $linePoints[$i]['x']) / 2;
+        $pathD .= ' C '.$cpx1.','.$linePoints[$i-1]['y'].' '.$cpx1.','.$linePoints[$i]['y'].' '.$linePoints[$i]['x'].','.$linePoints[$i]['y'];
+    }
+    $areaD = $pathD.' L '.$linePoints[count($linePoints)-1]['x'].','.($padT+$chartH).' L '.$linePoints[0]['x'].','.($padT+$chartH).' Z';
+@endphp
+
+<div class="line-chart-container">
+    <div class="line-tooltip" id="lineTooltip"></div>
+    <svg class="line-chart-svg" viewBox="0 0 {{ $lineW }} {{ $lineH }}" preserveAspectRatio="none">
+        <defs>
+            <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#059669"/>
+                <stop offset="50%"  stop-color="#34d399"/>
+                <stop offset="100%" stop-color="#06b6d4"/>
+            </linearGradient>
+            <linearGradient id="lineAreaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%"   stop-color="#10b981" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+            </linearGradient>
+        </defs>
+
+        {{-- Grid lines horizontales --}}
+        @for($g=0; $g<=4; $g++)
+        @php $gy = $padT + ($g/4)*$chartH; @endphp
+        <line class="line-grid" x1="{{ $padL }}" y1="{{ $gy }}" x2="{{ $lineW-$padR }}" y2="{{ $gy }}"/>
+        @endfor
+
+        {{-- Aire sous la courbe --}}
+        <path class="line-area" d="{{ $areaD }}"/>
+
+        {{-- Courbe principale --}}
+        <path class="line-path" id="linePath" d="{{ $pathD }}"/>
+
+        {{-- Points + labels mois --}}
+        @foreach($linePoints as $i => $pt)
+        <circle class="line-dot" id="dot-{{ $i }}"
+            cx="{{ $pt['x'] }}" cy="{{ $pt['y'] }}" r="3.5"
+            data-cost="{{ number_format($pt['cost'],0,',',' ') }}"
+            data-kwh="{{ number_format($pt['kwh'],0,',',' ') }}"
+            data-mois="{{ $pt['m'] }}"/>
+        <text class="line-axis-label" x="{{ $pt['x'] }}" y="{{ $lineH - 4 }}" text-anchor="middle">{{ $pt['m'] }}</text>
+        @endforeach
+    </svg>
+</div>
+                <!-- État équipements / alertes -->
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-title"><i class="ph ph-list-checks"></i> État des équipements</div>
+                        @if($alertes->count()>0)
+                        <a href="{{ route('devices.remplacer') }}" style="font-size:10px;color:var(--amber);text-decoration:none;font-weight:600;">Voir tout →</a>
+                        @endif
+                    </div>
+                    <div class="card-body" style="padding:7px 9px;">
+                        @php $allDevices = $topConso->merge($worstScore)->unique('id'); @endphp
+                        @if($allDevices->count()>0)
+                        <table class="srv-table">
+                            <thead>
+                                <tr><th>Équipement</th><th>kWh</th><th>Score</th><th>Statut</th></tr>
+                            </thead>
+                            <tbody>
+                                @foreach($allDevices->take(8) as $dev)
+                                @php
+                                    $sc = $dev->score_green_it ?? 0;
+                                    $sCls = $sc>=70?'score-hi':($sc>=40?'score-mid':'score-lo');
+                                    $age = $dev->date_achat ? now()->diffInYears($dev->date_achat) : null;
+                                    $isAl = $dev->statut==='recycle'||($age!==null&&$dev->duree_vie_annees&&$age>=$dev->duree_vie_annees);
+                                @endphp
+                                <tr>
+                                    <td class="srv-name">{{ Str::limit($dev->nom,18) }}</td>
+                                    <td>{{ number_format($dev->conso_annuelle_kwh??0,0,',',' ') }}</td>
+                                    <td><span class="score-pill {{ $sCls }}">{{ $sc }}</span></td>
+                                    <td>
+                                        @if($isAl)
+                                            <span style="color:var(--red);font-size:9px;font-weight:600;"><i class="ph ph-warning"></i> Alerte</span>
+                                        @else
+                                            <span style="color:var(--green-primary);font-size:9px;font-weight:600;"><i class="ph ph-check-circle"></i> OK</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        @elseif($alertes->count()>0)
+                        <div class="alert-list">
+                            @foreach($alertes as $dev)
+                            @php $r=[]; if($dev->statut==='recycle')$r[]='À recycler'; $a2=$dev->date_achat?now()->diffInYears($dev->date_achat):null; if($a2!==null&&$dev->duree_vie_annees&&$a2>=$dev->duree_vie_annees)$r[]='Âge dépassé'; @endphp
+                            <a href="{{ route('devices.edit',$dev) }}" class="alert-item">
+                                <div class="alert-icon"><i class="ph ph-warning"></i></div>
+                                <div class="alert-info">
+                                    <div class="alert-name">{{ $dev->nom }}</div>
+                                    <div class="alert-reason">{{ implode(' + ',$r)?:'À remplacer' }}</div>
+                                </div>
+                                <i class="ph ph-caret-right alert-arrow"></i>
+                            </a>
                             @endforeach
                         </div>
-                    @else
-                        <div class="empty-state-dark">
-                            <i class="ph ph-check-circle"></i>
-                            <span>Aucune alerte</span>
-                        </div>
-                    @endif
+                        @else
+                        <div class="empty-ok"><i class="ph ph-check-circle"></i><span>Aucune alerte</span></div>
+                        @endif
+                    </div>
                 </div>
-            </div>
-        </div>
 
-    </main>
-</div>
+            </div><!-- /grid-bottom -->
+
+        </div><!-- /dash-body -->
+    </div><!-- /main -->
+</div><!-- /shell -->
 
 <script>
-    // ═══════════════════════════════════════════════════════════════
-    //  SIDEBAR TOGGLE
-    // ═══════════════════════════════════════════════════════════════
-    const sidebar = document.getElementById('sidebar');
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const toggleIcon = sidebarToggle.querySelector('i');
+// SIDEBAR TOGGLE
+const sidebar = document.getElementById('sidebar');
+const toggle  = document.getElementById('sidebarToggle');
+const icon    = toggle.querySelector('i');
+if(localStorage.getItem('sbCollapsed')==='true'){ sidebar.classList.add('collapsed'); icon.classList.replace('ph-caret-left','ph-caret-right'); }
+toggle.addEventListener('click',()=>{
+    sidebar.classList.toggle('collapsed');
+    const c = sidebar.classList.contains('collapsed');
+    icon.classList.replace(c?'ph-caret-left':'ph-caret-right', c?'ph-caret-right':'ph-caret-left');
+    localStorage.setItem('sbCollapsed', c);
+});
 
-    // Check saved state
-    const sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-    if (sidebarCollapsed) {
-        sidebar.classList.add('collapsed');
-        toggleIcon.classList.remove('ph-caret-left');
-        toggleIcon.classList.add('ph-caret-right');
+// ANIMATIONS
+document.addEventListener('DOMContentLoaded',()=>{
+    const score = {{ $kpis['score_moyen'] }};
+
+    // Gauge
+    const arc    = document.getElementById('gaugeArc');
+    const needle = document.getElementById('gaugeNeedle');
+    const totalArc = 179;
+    const pct = Math.min(Math.max(score/100,0),1);
+    setTimeout(()=>{
+        arc.style.strokeDasharray = (pct*totalArc)+' '+totalArc;
+        needle.style.transform = `rotate(${-90+pct*180}deg)`;
+    },300);
+
+    // CO2 bars
+    setTimeout(()=>{
+        document.querySelectorAll('.co2-bar[data-height]').forEach(b=>{ b.style.height=b.dataset.height; });
+    },200);
+
+    // ✅ NOUVEAU — animation courbe
+setTimeout(()=>{
+    const path = document.getElementById('linePath');
+    if(path) {
+        const len = path.getTotalLength();
+        path.style.strokeDasharray = len;
+        path.style.strokeDashoffset = len;
+        setTimeout(()=>{ path.style.strokeDashoffset = 0; }, 100);
     }
-
-    sidebarToggle.addEventListener('click', function() {
-        sidebar.classList.toggle('collapsed');
-        const isCollapsed = sidebar.classList.contains('collapsed');
-
-        // Toggle icon
-        if (isCollapsed) {
-            toggleIcon.classList.remove('ph-caret-left');
-            toggleIcon.classList.add('ph-caret-right');
-        } else {
-            toggleIcon.classList.remove('ph-caret-right');
-            toggleIcon.classList.add('ph-caret-left');
-        }
-
-        // Save state
-        localStorage.setItem('sidebarCollapsed', isCollapsed);
+    // Apparition des points
+    document.querySelectorAll('.line-dot').forEach((dot, i)=>{
+        setTimeout(()=>{ dot.style.opacity = 1; }, 400 + i * 120);
     });
-
-    // ═══════════════════════════════════════════════════════════════
-    //  ANIMATION DES GRAPHIQUES
-    // ═══════════════════════════════════════════════════════════════
-    document.addEventListener('DOMContentLoaded', function() {
-        // Animation des bâtons verticaux
-        setTimeout(function() {
-            const bars = document.querySelectorAll('.baton-bar[data-height]');
-            bars.forEach(function(bar) {
-                bar.style.height = bar.getAttribute('data-height');
-            });
-        }, 200);
-
-        // Animation des barres mensuelles horizontales
-        setTimeout(function() {
-            const monthBars = document.querySelectorAll('.month-bar[data-width]');
-            monthBars.forEach(function(bar, index) {
-                setTimeout(function() {
-                    bar.style.width = bar.getAttribute('data-width');
-                }, index * 80); // Stagger animation
-            });
-        }, 400);
+    // Tooltip au survol
+    const tooltip = document.getElementById('lineTooltip');
+    document.querySelectorAll('.line-dot').forEach(dot=>{
+        dot.addEventListener('mouseenter', e=>{
+            tooltip.innerHTML = `<b>${dot.dataset.mois}</b><br>${dot.dataset.cost} DH<br>${dot.dataset.kwh} kWh`;
+            tooltip.style.opacity = 1;
+        });
+        dot.addEventListener('mousemove', e=>{
+            const rect = e.target.closest('.line-chart-container').getBoundingClientRect();
+            tooltip.style.left = (e.clientX - rect.left + 10)+'px';
+            tooltip.style.top  = (e.clientY - rect.top - 40)+'px';
+        });
+        dot.addEventListener('mouseleave', ()=>{ tooltip.style.opacity = 0; });
     });
+}, 500);
 </script>
-
 </body>
 </html>
