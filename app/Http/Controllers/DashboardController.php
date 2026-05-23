@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB; 
 use Illuminate\Http\Request;
 use App\Models\Device;
+
 
 class DashboardController extends Controller
 {
@@ -58,7 +59,22 @@ class DashboardController extends Controller
             })
             ->take(5)
             ->get();
-
-        return view('dashboard', compact('kpis', 'topConso', 'worstScore', 'parType', 'alertes'));
+        $co2ParMois = DB::table('energy_logs')  // ← remplace par ton vrai nom de table
+        ->select(
+            DB::raw('MONTH(date_debut) as mois'),
+            DB::raw('SUM(emission_co2_kg) as total')
+        )
+        ->whereYear('date_debut', now()->year)
+        ->groupBy('mois')
+        ->orderBy('mois')
+        ->pluck('total', 'mois')
+        ->toArray();
+       
+        $co2ParMoisComplet = [];
+    for ($i = 1; $i <= 12; $i++) {
+        $co2ParMoisComplet[$i] = $co2ParMois[$i] ?? 0;
     }
+        return view('dashboard', compact('kpis', 'topConso', 'worstScore', 'parType', 'alertes', 'co2ParMoisComplet'));
+    }
+
 }

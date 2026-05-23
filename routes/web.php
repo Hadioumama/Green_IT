@@ -46,3 +46,27 @@ Route::middleware('auth')->group(function () {
     Route::get('/energy/create', [EnergyController::class, 'createWeb'])->name('energy.create');
     Route::post('/energy', [EnergyController::class, 'storeWeb'])->name('energy.store');
 });
+Route::get('/profile', function () {
+    return view('layouts.profile');
+})->middleware('auth')->name('profile');
+Route::patch('/profile', function (Illuminate\Http\Request $request) {
+    $user = Auth::user();
+
+    $request->validate([
+        'name'  => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,'.$user->id,
+        'password' => 'nullable|min:8|confirmed',
+    ]);
+
+    $user->name  = $request->name;
+    $user->email = $request->email;
+
+    if ($request->filled('password')) {
+        $user->password = bcrypt($request->password);
+    }
+
+    $user->save();
+
+    return back()->with('success', 'Profil mis à jour avec succès !');
+
+})->middleware('auth')->name('profile.update');

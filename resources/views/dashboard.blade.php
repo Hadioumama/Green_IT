@@ -226,17 +226,19 @@ nav { display: flex; flex-direction: column; gap: 2px; }
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    min-width: 0;
+    min-width: 0px;
 }
 
 /* ── TOP BAR ── */
 .topbar {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 24px;
+    padding: 2px 24px;
+    min-height:20px;
     border-bottom: 1px solid var(--border-dim);
     background: rgba(87, 109, 100, 0.22);
     backdrop-filter: blur(10px);
     flex-shrink: 0;
+
 }
 .title-badge {
     display:inline-flex; align-items:center; gap:7px;
@@ -367,22 +369,22 @@ nav { display: flex; flex-direction: column; gap: 2px; }
 }
 .gauge-card:hover { border-color: var(--border); }
 .gauge-title {
-    font-family:'Rajdhani',sans-serif; font-size:10px; font-weight:700;
+    font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:700;
     color:var(--green-bright); text-transform:uppercase; letter-spacing:0.10em;
     margin-bottom:8px; display:flex; align-items:center; gap:5px;
 }
-.gauge-wrap { position:relative; width:150px; height:90px; }
+.gauge-wrap { position:relative; width:185px; height:100px; }
 .gauge-svg { overflow:visible; }
-.gauge-bg-arc { fill:none; stroke:rgba(16,185,129,0.10); stroke-width:9; stroke-linecap:round; }
-.gauge-arc    { fill:none; stroke:url(#gaugeGrad); stroke-width:9; stroke-linecap:round; transition:stroke-dasharray 1.4s cubic-bezier(.4,0,.2,1); }
+.gauge-bg-arc { fill:none; stroke:rgba(16,185,129,0.10); stroke-width:8; stroke-linecap:round; }
+.gauge-arc    { fill:none; stroke:url(#gaugeGrad); stroke-width:8; stroke-linecap:round; transition:stroke-dasharray 1.4s cubic-bezier(.4,0,.2,1); }
 .gauge-needle { transform-origin:75px 75px; transition:transform 1.4s cubic-bezier(.4,0,.2,1); }
 .gauge-value {
-    position:absolute; bottom:0; left:50%; transform:translateX(-50%);
-    font-family:'Rajdhani',sans-serif; font-size:28px; font-weight:700;
-    color:var(--green-bright); text-shadow:0 0 18px var(--green-glow); line-height:1;
+    position:absolute; bottom:-30px; left:50%; transform:translateX(-50%);
+    font-family:'Rajdhani',sans-serif; font-size:28px; font-weight:900;
+    color:var(--green-bright); text-shadow:0 0 18px var(--green-glow);
 }
-.gauge-pct { font-size:12px; font-weight:500; color:var(--text-2); margin-left:1px; }
-.gauge-range { display:flex; justify-content:space-between; width:150px; font-size:8px; color:var(--text-3); margin-top:3px; }
+.gauge-pct { font-size:10px; font-weight:600; color:var(--green-bright); margin-left:1px; }
+.gauge-range { display:flex; justify-content:space-between; width:150px; font-size:15px;font-weight:700; color:var(--text-3); margin-top:3px; }
 
 .score-mini-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; width:100%; }
 .score-mini {
@@ -393,27 +395,30 @@ nav { display: flex; flex-direction: column; gap: 2px; }
 .score-mini-label { font-size:8px; color:var(--text-3); text-transform:uppercase; letter-spacing:0.06em; margin-top:2px; }
 
 /* ── CO2 BARS ── */
+
 .co2-chart {
     display:flex; align-items:flex-end; gap:5px;
-    flex:1; padding-bottom:16px; position:relative;
+    height: 130px;        /* ← hauteur fixe totale */
+    padding-bottom:16px; 
+    position:relative;
 }
 .co2-chart::after { content:''; position:absolute; bottom:16px; left:0; right:0; height:1px; background:var(--border-dim); }
 .co2-bar-group { display:flex; flex-direction:column; align-items:center; gap:3px; flex:1; }
-.co2-bar-wrap { width:100%; display:flex; align-items:flex-end; justify-content:center; flex:1; }
+.co2-bar-wrap { width:100%; display:flex; align-items:flex-end; justify-content:center; height: 100px; }
 .co2-bar {
     width:70%; max-width:18px; border-radius:3px 3px 0 0;
     background:linear-gradient(180deg, var(--green-bright), var(--green-dark));
     transition:height 1.2s cubic-bezier(.4,0,.2,1); min-height:3px; position:relative;
 }
 .co2-bar::after { content:''; position:absolute; top:0; left:0; right:0; height:6px; background:linear-gradient(180deg,rgba(255,255,255,0.18),transparent); border-radius:3px 3px 0 0; }
-.co2-bar-label { font-size:7px; color:var(--text-3); text-align:center; white-space:nowrap; }
+.co2-bar-label { font-size:9px;font-weight:800; color:var(--text-3); text-align:center; white-space:nowrap; }
 
 /* ── DONUT ── */
-.donut-wrap { display:flex; align-items:center; gap:14px; flex:1; }
+.donut-wrap { display:flex; align-items:center;justify-content:center;; gap:14px; flex:1; }
 .donut-svg-wrap { position:relative; flex-shrink:0; }
 .donut-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; }
 .donut-center-val { font-family:'Rajdhani',sans-serif; font-size:20px; font-weight:700; color:var(--text-1); line-height:1; }
-.donut-center-sub { font-size:7px; color:var(--text-3); text-transform:uppercase; }
+.donut-center-sub { font-size:9px; color:white; text-transform:uppercase; }
 .donut-legend { display:flex; flex-direction:column; gap:6px; flex:1; }
 .dl-item { display:flex; align-items:center; gap:7px; }
 .dl-dot { width:8px; height:8px; border-radius:3px; flex-shrink:0; }
@@ -509,6 +514,7 @@ nav { display: flex; flex-direction: column; gap: 2px; }
     to   { opacity:1; transform:translateY(0); }
 }
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -548,7 +554,6 @@ nav { display: flex; flex-direction: column; gap: 2px; }
                 </a>
             </nav>
         </div>
-
         <div class="sidebar-footer">
             <div class="user-row">
                 <div class="avatar">{{ substr(Auth::user()->name, 0, 1) }}</div>
@@ -576,8 +581,21 @@ nav { display: flex; flex-direction: column; gap: 2px; }
                 Projet Green IT — Tableau de Bord
             </div>
             <div class="topbar-right">
-                <button class="tb-btn" title="Paramètres"><i class="ph ph-sliders"></i></button>
-                <button class="tb-btn" title="Profil"><i class="ph ph-user-circle"></i></button>
+                <a href="{{route('profile')}}" title="{{Auth::user()->name}}" style="text-decoration:none;">
+                 <div class="tb-btn" style="
+        background: var(--bg-inner);
+        color:#10b981;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        border-color: transparent;
+        margin-top: 17px;
+       
+    ">
+                    
+ </div>
+ <i class="ph ph-user-circle" style="position:relative;top:-25px; padding:6px;font-size:22px;color:#10b981"></i>
+</a>
                 <div class="tb-date">
                     <i class="ph ph-calendar-blank"></i>
                     <span>{{ now()->format('d M Y') }}</span>
@@ -625,42 +643,48 @@ nav { display: flex; flex-direction: column; gap: 2px; }
             <!-- MAIN GRID: CO2 | Gauge | Donut -->
             <div class="grid-main">
 
-                <!-- CO2 par mois -->
-                <div class="card">
-                    <div class="card-head">
-                        <div class="card-title"><i class="ph ph-chart-bar"></i> Émissions CO₂ par mois (kg)</div>
-                    </div>
-                    <div class="card-body">
-                        @php
-                            $co2Mois = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
-                            $co2Var  = [1.05,1.08,1.10,1.00,0.95,0.88,0.90,0.92,0.97,1.02,1.08,1.15];
-                            $co2Base = ($kpis['total_co2'] ?? 1500) / 12;
-                            $co2Data = []; $maxCo2 = 0;
-                            foreach($co2Mois as $i => $m){
-                                $v = round($co2Base * $co2Var[$i]);
-                                $co2Data[] = ['m'=>$m,'v'=>$v];
-                                if($v>$maxCo2) $maxCo2=$v;
-                            }
-                        @endphp
-                        <div class="co2-chart">
-                            @foreach($co2Data as $d)
-                            <div class="co2-bar-group">
-                                <div class="co2-bar-wrap">
-                                    <div class="co2-bar" style="height:0%;" data-height="{{ $maxCo2>0?round(($d['v']/$maxCo2)*100):0 }}%"></div>
-                                </div>
-                                <span class="co2-bar-label">{{ $d['m'] }}</span>
-                            </div>
-                            @endforeach
-                        </div>
+               <!-- CO2 par mois -->
+<!-- CO2 par mois -->
+<div class="card">
+    <div class="card-head">
+        <div class="card-title"><i class="ph ph-chart-bar"></i> Émissions CO₂ par mois (kg)</div>
+    </div>
+    <div class="card-body">
+       @php
+    $co2Mois = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+    $co2Data = [];
+    $maxCo2  = 0;
+    foreach($co2Mois as $i => $m) {
+        $v = $co2ParMoisComplet[$i + 1] ?? 0;   // ← utilise les vraies données du controller
+        $co2Data[] = ['m' => $m, 'v' => round($v, 2)];
+        if($v > $maxCo2) $maxCo2 = $v;
+    }
+    if($maxCo2 == 0) $maxCo2 = 1;   // ← évite la division par zéro
+@endphp
+        <div class="co2-chart">
+            @foreach($co2Data as $d)
+            @php
+                $height = $maxCo2 > 0 ? round(($d['v'] / $maxCo2) * 100) : 0;
+            @endphp
+            <div class="co2-bar-group">
+                <div class="co2-bar-wrap">
+                    <!-- Height défini DIRECTEMENT en PHP, pas de data-height -->
+                    <div class="co2-bar" 
+                         style="height: {{ $height }}%;">
                     </div>
                 </div>
-
-                <!-- Gauge -->
+                <span class="co2-bar-label">{{ $d['m'] }}</span>
+                <span style="font-size:9px;font-weight:700; color:var(--text-3);">{{ $d['v'] }}</span>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</div>
                 <div class="center-col">
                     <div class="gauge-card">
                         <div class="gauge-title"><i class="ph ph-leaf"></i> Score Green IT (%)</div>
                         <div class="gauge-wrap">
-                            <svg class="gauge-svg" viewBox="0 0 150 90" width="150" height="90">
+                            <svg class="gauge-svg" viewBox="0 0 150 90" width="185" height="110">
                                 <defs>
                                     <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                                         <stop offset="0%" stop-color="#059669"/>
@@ -698,7 +722,7 @@ nav { display: flex; flex-direction: column; gap: 2px; }
                     <div class="card-body">
                         @php
                             $total2 = $parType->sum('count');
-                            $dColors = ['#10b981','#3b82f6','#f59e0b','#8b5cf6','#06b6d4','#ec4899'];
+                            $dColors = ['#0f08dc','#35e2b1','#18bdf0','#4a06e9','#62d5e9','#c52374'];
                             $offset2 = 25;
                         @endphp
                         <div class="donut-wrap">
@@ -715,7 +739,7 @@ nav { display: flex; flex-direction: column; gap: 2px; }
                                         stroke-dasharray="{{ $dash3 }} 100" stroke-dashoffset="{{ -$offset2 }}" stroke-linecap="round"/>
                                     @php $offset2+=$dash3; @endphp
                                     @endforeach
-                                    <circle cx="18" cy="18" r="12" fill="rgba(4,12,20,0.85)"/>
+                                    <circle cx="18" cy="18" r="12" fill=" var(--bg-inner)"/>
                                 </svg>
                                 <div class="donut-center">
                                     <div class="donut-center-val">{{ $total2 }}</div>
@@ -743,7 +767,34 @@ nav { display: flex; flex-direction: column; gap: 2px; }
             <!-- BOTTOM GRID: Monthly | Table -->
             <div class="grid-bottom">
 
-                @php
+                <!-- Monthly Cost Chart -->
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-title"><i class="ph ph-currency-circle-dollar"></i> Estimation mensuelle (DH)</div>
+                    </div>
+                    <div class="card-body" style="padding:10px;">
+
+@php
+    /* ═══════════════════════════════════════════════════════════════
+       DONNÉES MENSUELLES — calculées ici pour le graphique ligne
+       ═══════════════════════════════════════════════════════════════ */
+    $prixKwh = 1.5;
+    $consoAnnuelle = $kpis['total_conso_actifs'] ?? ($kpis['total_conso'] * 0.8);
+    $consoMensuelle = $consoAnnuelle / 12;
+    $moisNoms = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+    $variations = [1.15,1.10,1.05,0.95,0.90,0.85,0.90,0.95,1.00,1.05,1.10,1.20];
+
+    $mData = [];   // ← VARIABLE CRÉÉE ICI
+    foreach($moisNoms as $i => $m) {
+        $kwh = $consoMensuelle * $variations[$i];
+        $mData[] = [
+            'm'    => $m,
+            'kwh'  => round($kwh, 1),
+            'cost' => round($kwh * $prixKwh, 1)
+        ];
+    }
+
+    /* ── Line chart geometry ── */
     $linePoints = [];
     $lineW = 520; $lineH = 130; $padL = 30; $padR = 10; $padT = 10; $padB = 22;
     $chartW = $lineW - $padL - $padR;
@@ -751,11 +802,13 @@ nav { display: flex; flex-direction: column; gap: 2px; }
     $minCost = collect($mData)->min('cost');
     $maxCost = collect($mData)->max('cost');
     $range = $maxCost - $minCost ?: 1;
+
     foreach($mData as $i => $d) {
         $x = $padL + ($i / 11) * $chartW;
         $y = $padT + $chartH - (($d['cost'] - $minCost) / $range) * $chartH;
         $linePoints[] = ['x'=>round($x,1), 'y'=>round($y,1), 'm'=>$d['m'], 'cost'=>$d['cost'], 'kwh'=>$d['kwh']];
     }
+
     $pathD = 'M '.$linePoints[0]['x'].','.$linePoints[0]['y'];
     for($i=1; $i<count($linePoints); $i++) {
         $cpx1 = ($linePoints[$i-1]['x'] + $linePoints[$i]['x']) / 2;
@@ -802,6 +855,9 @@ nav { display: flex; flex-direction: column; gap: 2px; }
         @endforeach
     </svg>
 </div>
+                    </div>
+                </div>
+
                 <!-- État équipements / alertes -->
                 <div class="card">
                     <div class="card-head">
@@ -867,65 +923,61 @@ nav { display: flex; flex-direction: column; gap: 2px; }
 </div><!-- /shell -->
 
 <script>
-// SIDEBAR TOGGLE
-const sidebar = document.getElementById('sidebar');
-const toggle  = document.getElementById('sidebarToggle');
-const icon    = toggle.querySelector('i');
-if(localStorage.getItem('sbCollapsed')==='true'){ sidebar.classList.add('collapsed'); icon.classList.replace('ph-caret-left','ph-caret-right'); }
-toggle.addEventListener('click',()=>{
-    sidebar.classList.toggle('collapsed');
-    const c = sidebar.classList.contains('collapsed');
-    icon.classList.replace(c?'ph-caret-left':'ph-caret-right', c?'ph-caret-right':'ph-caret-left');
-    localStorage.setItem('sbCollapsed', c);
-});
+document.addEventListener('DOMContentLoaded', function() {
 
-// ANIMATIONS
-document.addEventListener('DOMContentLoaded',()=>{
+    /* ── SIDEBAR TOGGLE ── */
+    const sidebar = document.getElementById('sidebar');
+    const toggle  = document.getElementById('sidebarToggle');
+    const icon    = toggle.querySelector('i');
+
+    if (localStorage.getItem('sbCollapsed') === 'true') {
+        sidebar.classList.add('collapsed');
+        icon.classList.replace('ph-caret-left', 'ph-caret-right');
+    }
+
+    toggle.addEventListener('click', function() {
+        sidebar.classList.toggle('collapsed');
+        const c = sidebar.classList.contains('collapsed');
+        icon.classList.replace(
+            c ? 'ph-caret-left' : 'ph-caret-right',
+            c ? 'ph-caret-right' : 'ph-caret-left'
+        );
+        localStorage.setItem('sbCollapsed', c);
+    });
+
+    /* ── CO2 BARS ANIMATION ── */
+    setTimeout(function() {
+        document.querySelectorAll('.co2-bar[data-height]').forEach(function(b) {
+            b.style.height = b.dataset.height;
+        });
+    }, 200);
+
+    /* ── GAUGE ── */
     const score = {{ $kpis['score_moyen'] }};
-
-    // Gauge
     const arc    = document.getElementById('gaugeArc');
     const needle = document.getElementById('gaugeNeedle');
     const totalArc = 179;
-    const pct = Math.min(Math.max(score/100,0),1);
-    setTimeout(()=>{
-        arc.style.strokeDasharray = (pct*totalArc)+' '+totalArc;
-        needle.style.transform = `rotate(${-90+pct*180}deg)`;
-    },300);
+    const pct = Math.min(Math.max(score / 100, 0), 1);
+    setTimeout(function() {
+        arc.style.strokeDasharray = (pct * totalArc) + ' ' + totalArc;
+        needle.style.transform = 'rotate(' + (-90 + pct * 180) + 'deg)';
+    }, 300);
 
-    // CO2 bars
-    setTimeout(()=>{
-        document.querySelectorAll('.co2-bar[data-height]').forEach(b=>{ b.style.height=b.dataset.height; });
-    },200);
+    /* ── LINE CHART ── */
+    setTimeout(function() {
+        const path = document.getElementById('linePath');
+        if (path) {
+            const len = path.getTotalLength();
+            path.style.strokeDasharray = len;
+            path.style.strokeDashoffset = len;
+            setTimeout(function() { path.style.strokeDashoffset = 0; }, 100);
+        }
+        document.querySelectorAll('.line-dot').forEach(function(dot, i) {
+            setTimeout(function() { dot.style.opacity = 1; }, 400 + i * 120);
+        });
+    }, 500);
 
-    // ✅ NOUVEAU — animation courbe
-setTimeout(()=>{
-    const path = document.getElementById('linePath');
-    if(path) {
-        const len = path.getTotalLength();
-        path.style.strokeDasharray = len;
-        path.style.strokeDashoffset = len;
-        setTimeout(()=>{ path.style.strokeDashoffset = 0; }, 100);
-    }
-    // Apparition des points
-    document.querySelectorAll('.line-dot').forEach((dot, i)=>{
-        setTimeout(()=>{ dot.style.opacity = 1; }, 400 + i * 120);
-    });
-    // Tooltip au survol
-    const tooltip = document.getElementById('lineTooltip');
-    document.querySelectorAll('.line-dot').forEach(dot=>{
-        dot.addEventListener('mouseenter', e=>{
-            tooltip.innerHTML = `<b>${dot.dataset.mois}</b><br>${dot.dataset.cost} DH<br>${dot.dataset.kwh} kWh`;
-            tooltip.style.opacity = 1;
-        });
-        dot.addEventListener('mousemove', e=>{
-            const rect = e.target.closest('.line-chart-container').getBoundingClientRect();
-            tooltip.style.left = (e.clientX - rect.left + 10)+'px';
-            tooltip.style.top  = (e.clientY - rect.top - 40)+'px';
-        });
-        dot.addEventListener('mouseleave', ()=>{ tooltip.style.opacity = 0; });
-    });
-}, 500);
+});
 </script>
 </body>
 </html>
