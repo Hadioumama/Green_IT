@@ -29,7 +29,7 @@
             <div class="image-overlay">
                 
                 <h1>Bienvenue</h1>
-                <p>Connectez-vous pour accéder à votre espace personnel et gérer vos projets en toute simplicité.</p>
+                <p>Connectez-vous pour accéder à votre espace personnel et gérer vos équipements en toute simplicité.</p>
                 
                 <div class="features">
                     <div class="feature">

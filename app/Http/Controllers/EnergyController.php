@@ -51,39 +51,117 @@ class EnergyController extends Controller
        /**
      * Page : Historique des consommations
      */
-    public function indexWeb(Request $request)
-    {
-        $query = EnergyLog::with('device')
-            ->whereHas('device', function ($q) {
-                $q->where('user_id', Auth::id());
-            });
-
-        // Filtre par appareil
-        if ($request->filled('device_id')) {
-            $query->where('device_id', $request->device_id);
-        }
-
-        // Filtre par dates (utilise 'date' si ancienne migration, 'date_debut' si nouvelle)
-        if ($request->filled('date_debut')) {
-            $query->whereDate('date', '>=', $request->date_debut);
-        }
-        if ($request->filled('date_fin')) {
-            $query->whereDate('date', '<=', $request->date_fin);
-        }
-
-        // Tri par date (ancienne migration utilise 'date', nouvelle utilise 'date_debut')
-        $energyLogs = $query->orderBy('date', 'desc')->get();
-        
-        $devices = Device::where('user_id', Auth::id())->get();
-
-        // Stats globales
-        $totalConsumption = $energyLogs->sum(function($log) {
-            return $log->consumption_kwh ?? $log->consumption ?? 0;
-        });
-        $totalCO2 = $totalConsumption * 0.7; // Facteur Maroc
-
-        return view('energy.index', compact('energyLogs', 'devices', 'totalConsumption', 'totalCO2'));
+     public function indexWeb(Request $request)
+{
+    // ═══════════════════════════════════════════════
+    // ÉTAPE 1 : TOUS MES APPAREILS (Device)
+    // ═══════════════════════════════════════════════
+    
+    $devicesQuery = Device::query();
+    
+    if (Auth::user()->role !== 'admin') {
+        $devicesQuery->where('user_id', Auth::id());
     }
+    
+    if ($request->filled('type')) {
+        $devicesQuery->where('type', $request->type);
+    }
+    
+    $devices = $devicesQuery->get();
+
+    // ═══════════════════════════════════════════════
+    // ÉTAPE 2 : STATS GLOBALES
+    // ═══════════════════════════════════════════════
+    
+    $totalKwh = $devices->sum(function($device) {
+        return $device->conso_annuelle_kwh ?? 0;
+    });
+    
+    $totalCO2 = $totalKwh * 0.7;
+    $totalCost = $totalKwh * 1.5;
+    $activeDevices = $devices->where('statut', 'actif')->count();
+    $totalDevices = $devices->count();
+
+    // ═══════════════════════════════════════════════
+    // ÉTAPE 3 : DONNÉES POUR LA COURBE PAR APPAREIL
+    // ═══════════════════════════════════════════════
+    
+    $chartData = $devices->map(function($device) {
+        return [
+            'name' => $device->nom,
+            'kwh' => $device->conso_annuelle_kwh ?? 0,
+            'co2' => ($device->conso_annuelle_kwh ?? 0) * 0.7,
+            'type' => $device->type,
+        ];
+    });
+    \Log::info('chartData count: ' . $chartData->count());
+\Log::info('chartData: ' . json_encode($chartData));
+
+    // ═══════════════════════════════════════════════
+    // ÉTAPE 4 : MESURES ENREGISTRÉES (EnergyLog)
+    // ═══════════════════════════════════════════════
+    
+    $logsQuery = EnergyLog::with('device')
+        ->whereHas('device', function ($q) {
+            if (Auth::user()->role !== 'admin') {
+                $q->where('user_id', Auth::id());
+            }
+        });
+
+    // Filtres
+    if ($request->filled('device_id')) {
+        $logsQuery->where('device_id', $request->device_id);
+    }
+
+    if ($request->filled('date_debut')) {
+        $logsQuery->where(function($q) use ($request) {
+            $q->whereDate('date_debut', '>=', $request->date_debut)
+              ->orWhereDate('date', '>=', $request->date_debut);
+        });
+    }
+
+    if ($request->filled('date_fin')) {
+        $logsQuery->where(function($q) use ($request) {
+            $q->whereDate('date_debut', '<=', $request->date_fin)
+              ->orWhereDate('date', '<=', $request->date_fin);
+        });
+    }
+
+    $energyLogs = $logsQuery->get();
+
+    // UNIFIER les données pour la courbe temporelle
+    $logsPourLaCourbe = $energyLogs->map(function($log) {
+        $date = $log->date_debut ?? $log->date ?? now();
+        $kwh = $log->consumption_kwh ?? $log->consumption ?? 0;
+        
+        return [
+            'kwh' => (float) $kwh,
+            'date' => $date instanceof \Carbon\Carbon ? $date->toDateString() : (string) $date,
+        ];
+    })->sortBy('date')->values();
+
+    $totalMesures = $energyLogs->count();
+
+    // ═══════════════════════════════════════════════
+    // ÉTAPE 5 : ENVOYER À LA VUE
+    // ═══════════════════════════════════════════════
+    
+    return view('energy.index', [
+        'stats' => [
+            'total_kwh' => $totalKwh,
+            'total_co2' => $totalCO2,
+            'total_cost' => $totalCost,
+            'total_devices' => $totalDevices,
+            'active_devices' => $activeDevices,
+            'total_mesures' => $totalMesures,
+        ],
+        'chartData' => $chartData,
+        'energyLogs' => $energyLogs,
+        'logsPourLaCourbe' => $logsPourLaCourbe,
+        'devices' => $devices,
+    ]);
+}
+
     /**
      * Page : Formulaire d'ajout
      */

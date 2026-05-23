@@ -12,9 +12,15 @@ class DeviceController extends Controller
     /**
      * Affiche la liste des équipements avec stats Green IT
      */
-    public function index()
-    {
-        $devices = Device::with('user')->paginate(10);
+  public function index(Request $request)
+    {    
+         $query = Device::with('user');
+
+        if ($request->filled('statut')) {
+        $query->where('statut', $request->statut);
+    }
+
+    $devices = $query->paginate(10)->withQueryString();
         
         // Stats globales pour le dashboard
         $stats = [
@@ -28,7 +34,18 @@ class DeviceController extends Controller
                 ->count(),
         ];
         
-        return view('index', compact('devices', 'stats'));
+    $devicesAremplacer = Device::with('user')
+        ->where(function($query) {
+            $query->where('statut', 'recycle');
+        })
+        ->orWhere(function($query) {
+            $query->whereNotNull('date_achat')
+                  ->whereNotNull('duree_vie_annees')
+                  ->whereRaw('TIMESTAMPDIFF(YEAR, date_achat, CURDATE()) >= duree_vie_annees');
+        })
+        ->get();
+
+    return view('index', compact('devices', 'stats', 'devicesAremplacer'));
     }
 
     /**
@@ -80,7 +97,7 @@ class DeviceController extends Controller
         
         // 3. Empreinte fabrication via API (simulation)
         $device->calculerEmpreinteFabrication();
-
+      $device->refresh();
         return redirect()
             ->route('devices.index')
             ->with('success', sprintf(
@@ -116,6 +133,33 @@ class DeviceController extends Controller
         $users = User::all();
         return view('devices.edit', compact('device', 'users'));
     }
+    /**
+ * Affiche la liste complète des équipements à remplacer
+ */
+public function aRemplacer()
+{
+    $devices = Device::with('user')
+        ->where(function($query) {
+            $query->where('statut', 'recycle')
+                  ->orWhere(function($q) {
+                      $q->whereNotNull('date_achat')
+                        ->whereNotNull('duree_vie_annees')
+                        ->whereRaw('TIMESTAMPDIFF(YEAR, date_achat, CURDATE()) >= duree_vie_annees');
+                  });
+        })
+        ->get();
+
+    $stats = [
+        'a_recycler' => $devices->where('statut', 'recycle')->count(),
+        'age_depasse' => $devices->filter(function($d) {
+            $age = $d->date_achat ? now()->diffInYears($d->date_achat) : null;
+            return $age !== null && $d->duree_vie_annees && $age >= $d->duree_vie_annees;
+        })->count(),
+        'cout_total' => $devices->sum('cout_energie_annuel'),
+    ];
+
+    return view('devices.remplacer', compact('devices', 'stats'));
+}
 
     /**
      * Met à jour un équipement (recalcule si puissance change)
