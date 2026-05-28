@@ -2,743 +2,650 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parc informatique — Green IT</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="{{ asset('css/devices-index.css') }}">
-<style>
-    /* ═══════════════════════════════════════════════ */
-/* HEADER AVEC ALERTE BADGE */
-/* ═══════════════════════════════════════════════ */
+    <style>
+        /* ═══════════════════════════════════════════════ */
+        /* RESET & BASE STYLES (Thème Sombre) */
+        /* ═══════════════════════════════════════════════ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+:root {
+    --green-primary:   #10b981;
+    --green-bright:    #34d399;
+    --green-dark:      #059669;
+    --green-glow:      rgba(16,185,129,0.28);
+    --green-soft:      rgba(16, 185, 129, 0.1);
+    --green-softt:rgba(190, 204, 34, 0.88);
 
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    padding: 0 4px;
+    --bg-card:    rgba(244, 250, 248, 0.72);
+    --bg-inner:   rgba(255,255,255,0.055);
+    --bg-hover:   rgba(238, 241, 240, 0.09);
+
+    --border:     rgba(8, 25, 16, 0.2);
+    --border-dim: rgba(177, 165, 165, 0.08);
+
+    --text-1: #f4f6f5dd;
+    --text-2: #e6f3ec;
+    --text-3: #10b981;
+
+    --cyan:   #0cc5e6;
+    --amber:  #f79616de;
+ 
+    --blue:   #76b8f9ea;
+    --purple: #4c12d3;
+    --red:    #ef4444;
+
+    --r:      14px;
+    --r-lg:   22px;
 }
 
-.header-brand {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-/* ═══════════════════════════════════════════════ */
-/* BADGE ALERTE (petit carré) */
-/* ═══════════════════════════════════════════════ */
-
-.alert-badge {
-    position: relative;
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, #f97316, #ea580c);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
-}
-
-.alert-badge:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
-}
-
-.alert-badge i {
-    font-size: 20px;
-    color: white;
-}
-
-.alert-count {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 20px;
-    height: 20px;
-    background: #dc2626;
-    color: white;
-    border-radius: 50%;
-    font-size: 11px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid white;
-}
-/* ═══════════════════════════════════════════════ */
-/* INFOBULLE AVEC LISTE COMPLÈTE */
-/* ═══════════════════════════════════════════════ */
-
-.alert-tooltip {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    width: 320px;
-    max-height: 400px;           /* Hauteur max */
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    border: 1px solid #fed7aa;
-    padding: 16px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-    z-index: 1000;
-    
-    /* Flexbox pour structure */
-    display: flex;
-    flex-direction: column;
-}
-
-/* Flèche */
-.alert-tooltip::before {
-    content: '';
-    position: absolute;
-    top: -6px;
-    right: 16px;
-    width: 12px;
-    height: 12px;
-    background: white;
-    border-left: 1px solid #fed7aa;
-    border-top: 1px solid #fed7aa;
-    transform: rotate(45deg);
-}
-
-/* Afficher au survol */
-.alert-badge:hover .alert-tooltip {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-/* Header */
-.tooltip-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #f1f5f9;
-    flex-shrink: 0;            /* Ne pas rétrécir */
-}
-
-.tooltip-header i {
-    font-size: 18px;
-    color: #f97316;
-}
-
-.tooltip-header span {
-    font-size: 14px;
-    font-weight: 600;
-    color: #7c2d12;
-}
-
-/* Liste complète avec scroll */
-.tooltip-list-full {
-    overflow-y: auto;          /* Scroll vertical */
-    max-height: 280px;         /* Hauteur avant scroll */
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    
-    /* Style de la scrollbar */
-    scrollbar-width: thin;
-    scrollbar-color: #f97316 #fff7ed;
-}
-
-.tooltip-list-full::-webkit-scrollbar {
-    width: 6px;
-}
-
-.tooltip-list-full::-webkit-scrollbar-track {
-    background: #fff7ed;
-    border-radius: 3px;
-}
-
-.tooltip-list-full::-webkit-scrollbar-thumb {
-    background: #f97316;
-    border-radius: 3px;
-}
-
-/* Item cliquable */
-.tooltip-item-link {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 12px;
-    background: #fff7ed;
-    border-radius: 8px;
-    border-left: 3px solid #f97316;
-    text-decoration: none;
-    transition: all 0.2s;
-}
-
-.tooltip-item-link:hover {
-    background: #ffedd5;
-    transform: translateX(4px);
-}
-
-.tooltip-item-main {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.tooltip-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: #7c2d12;
-}
-
-.tooltip-reason {
-    font-size: 11px;
-    color: #c2410c;
-}
-
-.tooltip-item-link > i {
-    color: #f97316;
-    font-size: 16px;
-}
-
-/* Footer */
-.tooltip-footer {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px dashed #fed7aa;
-    text-align: center;
-    flex-shrink: 0;
-}
-
-.tooltip-hint {
-    font-size: 11px;
-    color: #9a3412;
-    font-style: italic;
-}
-
-/* ═══════════════════════════════════════════════ */
-/* BOUTON AJOUTER (inchangé) */
-/* ═══════════════════════════════════════════════ */
-
-.btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
-    background: #22c55e;
-    color: white;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.2s;
-    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
-}
-
-.btn-primary:hover {
-    background: #16a34a;
-    transform: translateY(-1px);
-}
-/* ═══════════════════════════════════════════════ */
-/* MODAL - Liste complète */
-/* ═══════════════════════════════════════════════ */
-
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.2s ease;
-}
-
-.modal-overlay.active {
-    display: flex;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.modal-content {
-    background: white;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 80vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-    animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-    from { 
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to { 
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Header */
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 24px;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-.modal-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #7c2d12;
-}
-
-.modal-title i {
-    font-size: 22px;
-    color: #f97316;
-}
-
-.modal-count {
-    background: #f97316;
-    color: white;
-    padding: 2px 10px;
-    border-radius: 12px;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-.modal-close {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    border: none;
-    background: #f1f5f9;
-    color: #64748b;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.modal-close:hover {
-    background: #e2e8f0;
-    color: #334155;
-}
-
-/* Body avec scroll */
-.modal-body {
+html, body {
+    font-family: 'Exo 2', sans-serif;
+    color: var(--text-1);
+    min-height: 100vh;
     overflow-y: auto;
-    padding: 16px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-.tooltip-more {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 6px 12px;
-    background-color: #e76d26;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.tooltip-more:hover {
-    background-color: #d34b15;
-    transform: translateX(3px);
-}
-/* Item du modal */
-.modal-item {
+    -webkit-font-smoothing: antialiased;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
-    background: #fff7ed;
-    border-radius: 12px;
+    justify-content: center;
+    padding: 40px 0;
+    background-image: url('{{ asset("images/img.jfif") }}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
-/* ═══════════════════════════════════════════════ */
-/* FILTRE DÉROULANT */
-/* ═══════════════════════════════════════════════ */
-
-.table-filters {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.filter-form {
-    margin: 0;
-}
-
-.filter-dropdown {
+.shell {
     position: relative;
-    display: inline-flex;
-    align-items: center;
+    z-index: 1;
+    display: flex;
+    width:  min(1380px, 85vw);
+    min-height: min(860px, 85vh);
+    background: rgba(143, 158, 151, 0.45);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border-radius: var(--r-lg);
+    border: 1px solid rgba(52,211,153,0.18);
+    box-shadow:
+        0 32px 80px rgba(0,0,0,0.45),
+        0  0  40px rgba(16,185,129,0.06) inset,
+        0  1px 0   rgba(255,255,255,0.12) inset;
+    animation: shellIn 0.8s cubic-bezier(.4,0,.2,1) both;
 }
 
-.filter-select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    padding: 8px 36px 8px 14px;
-    background: #ffffff;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 10px;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    color: #475569;
-    cursor: pointer;
-    outline: none;
-    min-width: 160px;
-    transition: all 0.2s ease;
+@keyframes shellIn {
+    from { opacity:0; transform:scale(0.97) translateY(14px); }
+    to   { opacity:1; transform:scale(1)    translateY(0); }
 }
 
-.filter-select:hover {
-    border-color: #cbd5e1;
-}
 
-.filter-select:focus {
-    border-color: #22c55e;
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
-}
+        /* ═══════════════════════════════════════════════ */
+        /* SIDEBAR (Barre latérale gauche) */
+        /* ═══════════════════════════════════════════════ */
+        .sidebar {
+            width: 260px;
+            background: #111613;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 16px;
+            flex-shrink: 0;
+        }
 
-.filter-icon {
-    position: absolute;
-    right: 12px;
-    pointer-events: none;
-    font-size: 16px;
-    color: #94a3b8;
-}
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding-left: 8px;
+        }
 
-/* Option sélectionnée = style actif */
-.filter-select option:checked {
-    font-weight: 600;
-    color: #22c55e;
-}
-</style>
+        .brand-logo-box {
+            width: 36px;
+            height: 36px;
+            background: #22c55e;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #111613;
+            font-size: 20px;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+        }
+
+        .brand-name {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
+
+        .sidebar-menu-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #22c55e;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+            padding-left: 8px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            color: #94a3b8;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-link i {
+            font-size: 18px;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: #ffffff;
+        }
+
+        .sidebar-item.active .sidebar-link {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            border-left: 3px solid #22c55e;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .sidebar-link .badge-count {
+            margin-left: auto;
+            background: #dc2626;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        /* ═══════════════════════════════════════════════ */
+        /* MAIN CONTENT AREA */
+        /* ═══════════════════════════════════════════════ */
+        .main-content {
+            flex-grow: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .header-title-wrapper h1 {
+            font-size: 24px;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .header-title-wrapper .subtitle {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* ═══════════════════════════════════════════════ */
+        /* GLASSMORPHISM PANELS */
+        /* ═══════════════════════════════════════════════ */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+        }
+
+        .stat-card i {
+            font-size: 28px;
+            opacity: 0.8;
+        }
+
+        .stat-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .stat-blue i { color: #38bdf8; }
+        .stat-green i { color: #4ade80; }
+        .stat-orange i { color: #fb923c; }
+        .stat-red i { color: #f87171; }
+        .stat-purple i { color: #c084fc; }
+
+        /* ═══════════════════════════════════════════════ */
+        /* TABLE STYLES */
+        /* ═══════════════════════════════════════════════ */
+        .table-section {
+            padding: 24px;
+        }
+
+        .table-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-toolbar h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-filters {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-count-total {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .filter-select {
+            appearance: none;
+            background: #161f1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            padding: 8px 36px 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .data-table th {
+            padding: 14px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #94a3b8;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 16px;
+            font-size: 14px;
+            color: #cbd5e1;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .data-table tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .device-title {
+            font-weight: 600;
+            color: #ffffff;
+            display: block;
+        }
+
+        .device-meta {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status-actif { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+        .status-stock { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+        .status-en_reparation { background: rgba(249, 115, 22, 0.15); color: #fdba74; }
+        .status-hors_service { background: rgba(220, 38, 38, 0.15); color: #f87171; }
+
+        .score-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+        .score-good { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #22c55e; }
+        .score-medium { background: rgba(234, 88, 12, 0.2); color: #fb923c; border: 1px solid #ea580c; }
+        .score-bad { background: rgba(220, 38, 38, 0.2); color: #f87171; border: 1px solid #dc2626; }
+
+        .btn-primary {
+            background: #22c55e;
+            color: #111613;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover { background: #16a34a; }
+
+        .actions { display: flex; gap: 8px; }
+        .btn-icon {
+            color: #94a3b8;
+            font-size: 16px;
+            text-decoration: none;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.02);
+            border: none;
+            cursor: pointer;
+        }
+        .btn-icon:hover { color: #ffffff; background: rgba(255, 255, 255, 0.08); }
+        .btn-delete:hover { color: #f87171; background: rgba(220, 38, 38, 0.1); }
+        
+        .inline-form { margin: 0; }
+    </style>
 </head>
 <body>
-<!-- HEADER -->
-<header class="page-header">
-    <div class="header-brand">
-        <i class="ph ph-leaf brand-icon"></i>
-        <div>
-            <h1>Parc informatique</h1>
-            <span class="subtitle">Gestion énergétique et empreinte carbone</span>
-        </div>
-    </div>
-    
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- ZONE DROITE : Alerte + Bouton -->
-    <!-- ═══════════════════════════════════════════════ -->
-    <div class="header-actions">
-        @if($devicesAremplacer->count() > 0)
-        <!-- Petit carré alerte -->
-        <div class="alert-badge" id="alertBadge">
-            <i class="ph ph-warning"></i>
-            <span class="alert-count">{{ $devicesAremplacer->count() }}</span>
-            <!-- Infobulle (aperçu au survol) -->
-            <div class="alert-tooltip" id="alertTooltip">
-                <!-- Vue APERÇU (par défaut) -->
-                <div class="tooltip-view" id="tooltipPreview">
-                    <div class="tooltip-header">
-                        <i class="ph ph-warning-circle"></i>
-                        <span>Équipements à remplacer</span>
-                    </div>
-                    <div class="tooltip-list">
-                        @foreach($devicesAremplacer->take(5) as $device)
-                            @php
-                                $raisons = [];
-                                if ($device->statut === 'recycle') $raisons[] = 'À recycler';
-                                $age = $device->date_achat ? now()->diffInYears($device->date_achat) : null;
-                                if ($age !== null && $device->duree_vie_annees && $age >= $device->duree_vie_annees) {
-                                    $raisons[] = "Âge dépassé";
-                                }
-                            @endphp
-                            <div class="tooltip-item">
-                                <span class="tooltip-name">{{ $device->nom }}</span>
-                                <span class="tooltip-reason">{{ implode(' + ', $raisons) }}</span>
-                            </div>
-                        @endforeach
-                        @if($devicesAremplacer->count()>3)
-                            <a href="{{ route('devices.remplacer') }}" class="tooltip-more">
-                             Voir les {{ $devicesAremplacer->count() }} équipements →
-                           </a>
-@endif
-                    </div>
-                    
-                </div>
-                
-                <!-- Vue COMPLÈTE (cachée par défaut) -->
-                <div class="tooltip-view tooltip-full" id="tooltipFull" style="display: none;">
-                    <div class="tooltip-header">
-                        <button class="btn-back" onclick="showPreview(event)">
-                            <i class="ph ph-arrow-left"></i>
-                        </button>
-                        <span>Tous les équipements à remplacer</span>
-                    </div>
-                    <div class="tooltip-list tooltip-list-scroll">
-                        @foreach($devicesAremplacer as $device)
-                            @php
-                                $raisons = [];
-                                if ($device->statut === 'recycle') $raisons[] = 'À recycler';
-                                $age = $device->date_achat ? now()->diffInYears($device->date_achat) : null;
-                                if ($age !== null && $device->duree_vie_annees && $age >= $device->duree_vie_annees) {
-                                    $raisons[] = "Âge dépassé ({$age}/{$device->duree_vie_annees} ans)";
-                                }
-                                $raisonTexte = implode(' + ', $raisons) ?: 'À remplacer';
-                            @endphp
-                            <a href="{{ route('devices.show', $device) }}" class="tooltip-item tooltip-item-link">
-                                <div class="tooltip-item-main">
-                                    <span class="tooltip-name">{{ $device->nom }}</span>
-                                    <span class="tooltip-reason">{{ $raisonTexte }}</span>
-                                </div>
-                                <i class="ph ph-caret-right"></i>
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-                
+
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-logo-box">
+                <i class="ph ph-leaf"></i>
             </div>
+            <span class="brand-name">GREEN IT</span>
         </div>
+
+        <div class="sidebar-menu-wrapper">
+            <p class="sidebar-menu-title">Principal</p>
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="ph ph-squares-four"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item active">
+                    <a href="{{ route('devices.index') }}" class="sidebar-link">
+                        <i class="ph ph-desktop"></i>
+                        <span>Parc informatique</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="ph ph-lightning"></i>
+                        <span>Consommation</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="ph ph-warning"></i>
+                        <span>Alertes</span>
+                        @if(isset($devicesAremplacer) && $devicesAremplacer->count() > 0)
+                            <span class="badge-count">{{ $devicesAremplacer->count() }}</span>
+                        @endif
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="page-header">
+            <div class="header-title-wrapper">
+                <h1>Parc informatique</h1>
+                <span class="subtitle">Gestion énergétique et empreinte carbone de vos équipements</span>
+            </div>
+            
+            <div class="header-actions">
+                <a href="{{ route('devices.create') }}" class="btn-primary">
+                    <i class="ph ph-plus"></i> Ajouter un équipement
+                </a>
+            </div>
+        </header>
+
+        @if(session('success'))
+            <div style="background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e; padding: 12px 16px; border-radius: 8px; color: #4ade80; margin-bottom: 24px; display: flex; align-items: center; gap: 8px;">
+                <i class="ph ph-check-circle" style="font-size: 18px;"></i>
+                <span>{{ session('success') }}</span>
+            </div>
         @endif
-       
-        <a href="{{ route('devices.create') }}" class="btn btn-primary">
-            <i class="ph ph-plus"></i> Ajouter un équipement
-        </a>
-    </div>
-</header>
 
-    <!-- MESSAGE -->
-    @if(session('success'))
-        <div class="alert alert-success">
-            <i class="ph ph-check-circle"></i>
-            {{ session('success') }}
+        <div class="stats-grid">
+            <div class="stat-card glass-panel stat-blue">
+                <i class="ph ph-desktop"></i>
+                <div class="stat-info">
+                    <span class="stat-value">{{ $stats['total_devices'] ?? 0 }}</span>
+                    <span class="stat-label">Équipements</span>
+                </div>
+            </div>
+            
+            <div class="stat-card glass-panel stat-green">
+                <i class="ph ph-lightning"></i>
+                <div class="stat-info">
+                    <span class="stat-value">{{ number_format($stats['total_conso_kwh'] ?? 0, 0, ',', ' ') }}</span>
+                    <span class="stat-label">kWh / an</span>
+                </div>
+            </div>
+            
+            <div class="stat-card glass-panel stat-orange">
+                <i class="ph ph-cloud"></i>
+                <div class="stat-info">
+                    <span class="stat-value">{{ number_format($stats['total_emission_co2'] ?? 0, 0, ',', ' ') }}</span>
+                    <span class="stat-label">kg CO₂ / an</span>
+                </div>
+            </div>
+            
+            <div class="stat-card glass-panel stat-red">
+                <i class="ph ph-factory"></i>
+                <div class="stat-info">
+                    <span class="stat-value">{{ number_format($stats['total_fabrication_co2'] ?? 0, 0, ',', ' ') }}</span>
+                    <span class="stat-label">kg CO₂ Fab.</span>
+                </div>
+            </div>
+            
+            <div class="stat-card glass-panel stat-purple">
+                <i class="ph ph-warning"></i>
+                <div class="stat-info">
+                    <span class="stat-value">{{ $stats['devices_a_remplacer'] ?? 0 }}</span>
+                    <span class="stat-label">À remplacer</span>
+                </div>
+            </div>
         </div>
-    @endif
 
-    <!-- STATS CARDS -->
-    <div class="stats-grid">
-        <div class="stat-card stat-blue">
-            <i class="ph ph-desktop"></i>
-            <div class="stat-info">
-                <span class="stat-value">{{ $stats['total_devices'] }}</span>
-                <span class="stat-label">Équipements</span>
+        <div class="table-section glass-panel">
+            <div class="table-toolbar">
+                <h2><i class="ph ph-list"></i> Liste des équipements</h2>
+                
+                <div class="table-filters">
+                    <span class="badge-count-total">{{ $stats['devices_actifs'] ?? 0 }} Actifs</span>
+                    
+                    <form action="{{ route('devices.index') }}" method="GET" class="filter-form">
+                        <div style="position: relative; display: inline-flex; align-items: center;">
+                            <select name="statut" onchange="this.form.submit()" class="filter-select">
+                                <option value="">Tous les statuts</option>
+                                <option value="actif" {{ request('statut') == 'actif' ? 'selected' : '' }}>Actif</option>
+                                <option value="en_reparation" {{ request('statut') == 'en_reparation' ? 'selected' : '' }}>En réparation</option>
+                                <option value="hors_service" {{ request('statut') == 'hors_service' ? 'selected' : '' }}>Hors service</option>
+                                <option value="stock" {{ request('statut') == 'stock' ? 'selected' : '' }}>En stock</option>
+                                <option value="recycle" {{ request('statut') == 'recycle' ? 'selected' : '' }}>À recycler</option>
+                            </select>
+                            <i class="ph ph-faders" style="position: absolute; right: 12px; color: #94a3b8; pointer-events: none;"></i>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
-        
-        <div class="stat-card stat-green">
-            <i class="ph ph-lightning"></i>
-            <div class="stat-info">
-                <span class="stat-value">{{ number_format($stats['total_conso_kwh'], 0) }}</span>
-                <span class="stat-label">kWh/an</span>
-            </div>
-        </div>
-        
-        <div class="stat-card stat-orange">
-            <i class="ph ph-cloud"></i>
-            <div class="stat-info">
-                <span class="stat-value">{{ number_format($stats['total_emission_co2'], 0) }}</span>
-                <span class="stat-label">kg CO₂/an</span>
-            </div>
-        </div>
-        
-        <div class="stat-card stat-red">
-            <i class="ph ph-factory"></i>
-            <div class="stat-info">
-                <span class="stat-value">{{ number_format($stats['total_fabrication_co2'], 0) }}</span>
-                <span class="stat-label">kg CO₂ fab.</span>
-            </div>
-        </div>
-        
-        <div class="stat-card stat-purple">
-            <i class="ph ph-warning"></i>
-            <div class="stat-info">
-                <span class="stat-value">{{ $stats['devices_a_remplacer'] }}</span>
-          
-                <span class="stat-label">À remplacer</span>
-            </div>
-        </div>
-    </div>
 
-    <!-- TABLEAU -->
-    <div class="table-header">
-    <h2><i class="ph ph-list"></i> Liste des équipements</h2>
-    <div class="table-filters">
-        <span class="badge badge-actif">{{ $stats['devices_actifs'] }} actifs</span>
-        
-        <!-- ═══════════════════════════════════════════════ -->
-        <!-- FILTRE PAR STATUT -->
-        <!-- ═══════════════════════════════════════════════ -->
-        <form action="{{ route('devices.index') }}" method="GET" class="filter-form">
-            <div class="filter-dropdown">
-                <select name="statut" onchange="this.form.submit()" class="filter-select">
-                    <option value="">Tous les statuts</option>
-                    <option value="actif" {{ request('statut') == 'actif' ? 'selected' : '' }}>Actif</option>
-                    <option value="en_reparation" {{ request('statut') == 'en_reparation' ? 'selected' : '' }}>En réparation</option>
-                    <option value="hors_service" {{ request('statut') == 'hors_service' ? 'selected' : '' }}>Hors service</option>
-                    <option value="stock" {{ request('statut') == 'stock' ? 'selected' : '' }}>En stock</option>
-                    <option value="recycle" {{ request('statut') == 'recycle' ? 'selected' : '' }}>À recycler</option>
-                </select>
-                <i class="ph ph-faders filter-icon"></i>
-            </div>
-        </form>
-    </div>
-</div>
-
-        <div class="table-responsive">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Équipement</th>
-                        <th>Type</th>
-                        <th>Responsable</th>
-                        <th class="col-numeric">Puissance</th>
-                        <th class="col-numeric">Conso/an</th>
-                        <th class="col-numeric">CO₂/an</th>
-                        <th class="col-numeric">Score</th>
-                        <th>Statut</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($devices as $device)
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
                         <tr>
-                            <!-- Nom + détails -->
-                            <td>
-                                <div class="device-name">
+                            <th>Équipement</th>
+                            <th>Type</th>
+                            <th>Responsable</th>
+                            <th>Puissance</th>
+                            <th>Conso/an</th>
+                            <th>CO₂/an</th>
+                            <th>Score</th>
+                            <th>Statut</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($devices as $device)
+                            <tr>
+                                <td>
                                     <span class="device-title">{{ $device->nom }}</span>
                                     <span class="device-meta">{{ $device->marque }} {{ $device->modele }}</span>
-                                </div>
-                            </td>
-                            
-                            <!-- Type -->
-                            <td>
-                                <span class="badge-type badge-{{ strtolower($device->type) }}">
-                                    {{ $device->type }}
-                                </span>
-                            </td>
-                            
-                            <!-- Responsable -->
-                            <td>
-                                @if($device->user)
-                                    <div class="user-info">
-                                        <i class="ph ph-user"></i>
-                                        <span>{{ $device->user->name }}</span>
+                                </td>
+                                <td>
+                                    <span style="font-size: 13px; color: #94a3b8;">{{ $device->type }}</span>
+                                </td>
+                                <td>
+                                    @if($device->user)
+                                        <div style="display: flex; align-items: center; gap: 6px; font-size: 13px;">
+                                            <i class="ph ph-user" style="color: #22c55e;"></i>
+                                            <span>{{ $device->user->name }}</span>
+                                        </div>
+                                    @else
+                                        <span style="color: #64748b; font-size: 13px; font-style: italic;">Non assigné</span>
+                                    @endif
+                                </td>
+                                <td>{{ $device->puissance_watt ? number_format($device->puissance_watt, 0) . ' W' : '-' }}</td>
+                                <td>{{ $device->conso_annuelle_kwh ? number_format($device->conso_annuelle_kwh, 0) . ' kWh' : '-' }}</td>
+                                <td>{{ $device->emission_co2_kg ? number_format($device->emission_co2_kg, 0) . ' kg' : '-' }}</td>
+                                <td>
+                                    <div class="score-badge score-{{ $device->score_green_it >= 70 ? 'good' : ($device->score_green_it >= 40 ? 'medium' : 'bad') }}">
+                                        {{ $device->score_green_it }}
                                     </div>
-                                @else
-                                    <span class="text-muted">Non assigné</span>
-                                @endif
-                            </td>
-                            
-                            <!-- Puissance -->
-                            <td class="col-numeric">
-                                <span class="value-watt">{{ $device->puissance_watt ? number_format($device->puissance_watt, 0) . ' W' : '-' }}</span>
-                            </td>
-                            
-                            <!-- Consommation -->
-                            <td class="col-numeric">
-                                <span class="value-kwh">{{ $device->conso_annuelle_kwh ? number_format($device->conso_annuelle_kwh, 0) . ' kWh' : '-' }}</span>
-                            </td>
-                            
-                            <!-- Émissions -->
-                            <td class="col-numeric">
-                                @if($device->emission_co2_kg)
-                                    <span class="value-co2 {{ $device->emission_co2_kg > 100 ? 'co2-high' : 'co2-low' }}">
-                                        {{ number_format($device->emission_co2_kg, 0) }} kg
+                                </td>
+                                <td>
+                                    <span class="badge-status status-{{ $device->statut }}">
+                                        {{ 
+                                            $device->statut == 'actif' ? 'Actif' :
+                                            ($device->statut == 'stock' ? 'Stock' :
+                                            ($device->statut == 'en_reparation' ? 'Réparation' :
+                                            ($device->statut == 'hors_service' ? 'Hors service' : 'À recycler')))
+                                        }}
                                     </span>
-                                @else
-                                    <span class="text-muted">-</span>
-                                @endif
-                            </td>
-                            
-                            <!-- Score Green IT -->
-                            <td class="col-numeric">
-                                <div class="score-ring score-{{ $device->score_green_it >= 70 ? 'good' : ($device->score_green_it >= 40 ? 'medium' : 'bad') }}">
-                                    {{ $device->score_green_it }}
-                                </div>
-                            </td>
-                            
-                            <!-- Statut -->
-                            <td>
-                                <span class="badge-status status-{{ $device->statut }}">
-                                    {{ 
-                                        $device->statut == 'actif' ? 'Actif' :
-                                        ($device->statut == 'stock' ? 'Stock' :
-                                        ($device->statut == 'en_reparation' ? 'Réparation' :
-                                        ($device->statut == 'hors_service' ? 'Hors service' : 'À recycler')))
-                                    }}
-                                </span>
-                            </td>
-                            
-                            <!-- Actions -->
-                            <td>
-                                <div class="actions">
-                                    <a href="{{ route('devices.show', $device) }}" class="btn-icon btn-view" title="Voir">
-                                        <i class="ph ph-eye"></i>
-                                    </a>
-                                    <a href="{{ route('devices.edit', $device) }}" class="btn-icon btn-edit" title="Modifier">
-                                        <i class="ph ph-pencil"></i>
-                                    </a>
-                                    <form action="{{ route('devices.destroy', $device) }}" method="POST" class="inline-form">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-icon btn-delete" title="Supprimer" onclick="return confirm('Supprimer « {{ $device->nom }} » ?')">
-                                            <i class="ph ph-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="9" class="empty-state">
-                                <i class="ph ph-desktop"></i>
-                                <p>Aucun équipement enregistré</p>
-                                <a href="{{ route('devices.create') }}" class="btn btn-sm">Ajouter le premier</a>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                </td>
+                                <td>
+                                    <div class="actions" style="justify-content: flex-end;">
+                                        <a href="{{ route('devices.show', $device) }}" class="btn-icon" title="Voir"><i class="ph ph-eye"></i></a>
+                                        <a href="{{ route('devices.edit', $device) }}" class="btn-icon" title="Modifier"><i class="ph ph-pencil"></i></a>
+                                        <form action="{{ route('devices.destroy', $device) }}" method="POST" class="inline-form">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-icon btn-delete" title="Supprimer" onclick="return confirm('Supprimer « {{ $device->nom }} » ?')">
+                                                <i class="ph ph-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="9" style="text-align: center; padding: 40px; color: #64748b;">
+                                    <i class="ph ph-desktop" style="font-size: 48px; margin-bottom: 12px; display: block; opacity: 0.5;"></i>
+                                    <p>Aucun équipement enregistré dans le parc informatique.</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            @if($devices->hasPages())
+                <div style="margin-top: 20px;">
+                    {{ $devices->links() }}
+                </div>
+            @endif
         </div>
 
-        <!-- Pagination -->
-        <div class="pagination-wrapper">
-            {{ $devices->links() }}
-        </div>
-    </div>
-
-</div>
+    </main>
 </body>
 </html>
