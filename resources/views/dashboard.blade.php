@@ -578,7 +578,7 @@ nav { display: flex; flex-direction: column; gap: 2px; }
         <div class="topbar">
             <div class="title-badge">
                 <i class="ph ph-leaf"></i>
-                Projet Green IT — Tableau de Bord
+                 Tableau de Bord
             </div>
             <div class="topbar-right">
                 <a href="{{route('profile')}}" title="{{Auth::user()->name}}" style="text-decoration:none;">
