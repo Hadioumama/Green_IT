@@ -263,7 +263,7 @@ body::before {
     padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;
     text-decoration: none; transition: all 0.2s; border: none; cursor: pointer;
 }
-.btn-card-primary { background: rgba(16, 185, 129, 0.15); color: var(--green-bright); border: 1px solid rgba(16, 185, 129, 0.3); }
+.btn-card-primary { background: rgba(65, 253, 190, 0.3); color: var(--green-bright); border: 1px solid rgba(16, 185, 129, 0.3); }
 .btn-card-primary:hover { background: var(--green-primary); color: #fff; border-color: transparent; }
 .btn-card-secondary { background: rgba(255,255,255,0.05); color: var(--text-2); }
 .btn-card-secondary:hover { background: rgba(255,255,255,0.1); color: #fff; }
