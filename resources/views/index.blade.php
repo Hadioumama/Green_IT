@@ -357,7 +357,7 @@ body::before {
             padding: 12px 24px;
             min-height: 56px;
             border-bottom: 1px solid rgba(177, 165, 165, 0.08);
-            background: rgba(33, 48, 42, 0.22);
+            background: rgba(117, 143, 133, 0.32);
             backdrop-filter: blur(10px);
             flex-shrink: 0;
         }
@@ -411,7 +411,7 @@ body::before {
         /* GLASSMORPHISM PANELS */
         /* ═══════════════════════════════════════════════ */
         .glass-panel {
-            background: rgba(33, 48, 42, 0.22);
+            background: rgba(113, 133, 125, 0.22);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
