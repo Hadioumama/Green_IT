@@ -340,7 +340,7 @@ body::before {
         }
         .sidebar.collapsed .btn-logout span { display: none; }
 
-        .btn-logout:hover { background:#10b981; color:#ef4444; }
+        .btn-logout:hover { background:#10b981; color:white; }
         .btn-logout i { font-size:16px; flex-shrink:0; }
         .sidebar.collapsed .btn-logout { width:40px; padding:10px; justify-content:center; }
         .sidebar.collapsed .btn-logout span { display:none; }
