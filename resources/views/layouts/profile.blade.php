@@ -213,17 +213,27 @@
     transition: all 0.25s;
 }
 
-.input-wrapper:focus-within {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(52, 211, 153, 0.35);
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1), 0 4px 20px rgba(16, 185, 129, 0.08);
+.input-wrapper input:-webkit-autofill,
+.input-wrapper input:-webkit-autofill:hover,
+.input-wrapper input:-webkit-autofill:focus,
+.input-wrapper input:-webkit-autofill:focus-visible,
+.input-wrapper input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    box-shadow: 0 0 0px 1000px transparent inset !important;
+    -webkit-text-fill-color: #f0fdf4 !important;
+    background-color: transparent !important;
+    transition: background-color 5000s ease-in-out 0s !important;
 }
 
-.input-wrapper i {
-    font-size: 18px;
-    color: #34d399;
-    margin-right: 12px;
-    flex-shrink: 0;
+.input-wrapper input:focus,
+.input-wrapper input:active {
+    background: transparent !important;
+    background-color: transparent !important;
+    outline: none !important;
+}
+.input-wrapper:focus-within {
+    border-color: rgba(52, 211, 153, 0.35);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1), 0 4px 20px rgba(16, 185, 129, 0.08);
 }
 
 .input-wrapper input {
@@ -236,6 +246,14 @@
     font-weight: 500;
     height: 100%;
     width: 100%;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    -webkit-text-fill-color: #f0fdf4;
+}
+.input-wrapper i {
+    font-size: 18px;
+    color: #34d399;
+    margin-right: 12px;
+    flex-shrink: 0;
 }
 
 .input-wrapper input::placeholder {
@@ -417,7 +435,7 @@
             <div class="form-group">
                 <label for="password">
                     Nouveau mot de passe
-                    <span>(laisser vide = inchangé)</span>
+                   
                 </label>
                 <div class="input-wrapper">
                     <i class="ph ph-lock"></i>
