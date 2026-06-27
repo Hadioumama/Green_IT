@@ -301,7 +301,8 @@ body::before {
 }
 
 .form-group label .required {
-    color: var(--red);
+    color: rgba(235, 18, 18, 0.76);
+      font-size: 25px;
 }
 
 .form-group label .hint {
@@ -417,12 +418,12 @@ input[type="number"]::-webkit-outer-spin-button {
     align-items: flex-start;
     gap: 8px;
     padding: 10px 14px;
-    background:  rgba(16, 185, 129, 0.44);
+    background:  rgba(11, 205, 140, 0.74);
     border: 1px solid rgba(16, 185, 129, 0.15);
     border-radius: 8px;
     margin-top: 8px;
     font-size: 12px;
-    color: var(--green-bright);
+    color:white;
 }
 
 .info-box i {
@@ -477,7 +478,7 @@ input[type="number"]::-webkit-outer-spin-button {
     align-items: flex-start;
     gap: 10px;
     padding: 14px 18px;
-    background: rgba(16, 185, 129, 0.44);
+    background: rgba(16, 185, 129, 0.68);
     border: 1px solid rgba(16, 185, 129, 0.12);
     border-radius: 10px;
     font-size: 12px;
@@ -487,13 +488,13 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .form-footer i {
     font-size: 18px;
-    color: var(--green-bright);
+    color: white;
     flex-shrink: 0;
     margin-top: 1px;
 }
 
 .form-footer strong {
-    color: var(--green-bright);
+    color: white;
     font-weight: 600;
 }
 
