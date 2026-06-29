@@ -155,10 +155,17 @@ class EnergyController extends Controller
     }
 
     public function createWeb()
-    {
-        $devices = Device::where('user_id', Auth::id())->get();
-        return view('energy.create', compact('devices'));
+{
+    $query = Device::query();
+
+    if (Auth::user()->role !== 'admin') {
+        $query->where('user_id', Auth::id());
     }
+
+    $devices = $query->orderBy('nom')->get();
+
+    return view('energy.create', compact('devices'));
+}
 
     public function storeWeb(Request $request)
     {

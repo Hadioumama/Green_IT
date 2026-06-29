@@ -25,4 +25,7 @@ RUN composer install --no-dev --optimize-autoloader
 
 RUN chown -R www-data:www-data storage bootstrap/cache
 
+RUN php artisan config:cache
+RUN php artisan route:cache
+RUN php artisan view:cache
 CMD ["php-fpm"]

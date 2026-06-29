@@ -1,5 +1,4 @@
 services:
-
   app:
     build:
       context: .
@@ -9,6 +8,9 @@ services:
     working_dir: /var/www
     volumes:
       - .:/var/www
+      - sessions_data:/var/www/storage/framework/sessions
+      - cache_data:/var/www/storage/framework/cache
+      - views_data:/var/www/storage/framework/views
 
   nginx:
     image: nginx:latest
@@ -17,7 +19,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - .:/var/www
+      - .:/var/www:delegated
       - ./docker/nginx:/etc/nginx/conf.d
     depends_on:
       - app
@@ -36,3 +38,11 @@ services:
 
 volumes:
   mysql_data:
+  sessions_data:
+  cache_data:
+  views_data:
+volumes:
+  - .:/var/www:cached
+  - sessions_data:/var/www/storage/framework/sessions
+  - cache_data:/var/www/storage/framework/cache
+  - views_data:/var/www/storage/framework/views
